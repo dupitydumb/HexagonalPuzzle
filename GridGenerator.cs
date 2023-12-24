@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GridGenerator : MonoBehaviour
 {
-    public Levels[] levels;
+    public LevelGameData levels;
     
     public Grid grid;
 
@@ -117,31 +117,59 @@ public class GridGenerator : MonoBehaviour
 
     void PlacePrefab()
     {
-        foreach (var level in levels)
+        
+        int currentLevel = levels.levelNumber;
+        Levels level = levels.levels[currentLevel];
+
+        foreach (var levelData in level.levels)
         {
-            foreach (var levelData in level.levels)
+            foreach (var hexagonalPostion in levelData.hexagonalPostions)
             {
-                foreach (var hexagonalPostion in levelData.hexagonalPostions)
-                {
-                    // Instantiate to grid cell
-                    //Get the grid cell
-                    Vector3Int cellPos = new Vector3Int(hexagonalPostion.x, hexagonalPostion.y, 0);
-                    //Get the center of the grid cell
-                    Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
-                    var prefab = Instantiate(levelData.prefab, cellPos, Quaternion.Euler(0,0,90));
-                    prefab.transform.position = cellCenterPos;
-                    // Set the prefab to the center of the grid cell
-                    // prefab.GetComponent<HexagonBlock>().x = hexagonalPostion.x;
-                    // prefab.GetComponent<HexagonBlock>().y = hexagonalPostion.y;
-                    prefab.GetComponent<GuideGrid>().text.text = "";
-                    GridData.Instance.gridContainers.Add(new GridContainer(hexagonalPostion.x, hexagonalPostion.y, prefab));
-                    prefab.name = "Behind: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
-                    prefab.transform.SetParent(GameObject.FindWithTag("BehidGridPool").transform);
-
-
-                }
-            }
+                // Instantiate to grid cell
+                //Get the grid cell
+                Vector3Int cellPos = new Vector3Int(hexagonalPostion.x, hexagonalPostion.y, 0);
+                //Get the center of the grid cell
+                Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
+                var prefab = Instantiate(levelData.prefab, cellPos, Quaternion.Euler(0,0,90));
+                prefab.transform.position = cellCenterPos;
+                // Set the prefab to the center of the grid cell
+                // prefab.GetComponent<HexagonBlock>().x = hexagonalPostion.x;
+                // prefab.GetComponent<HexagonBlock>().y = hexagonalPostion.y;
+                prefab.GetComponent<GuideGrid>().text.text = "";
+                GridData.Instance.gridContainers.Add(new GridContainer(hexagonalPostion.x, hexagonalPostion.y, prefab));
+                prefab.name = "Behind: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
+                prefab.transform.SetParent(GameObject.FindWithTag("BehidGridPool").transform);
+            }    
         }
+        
+        
+        
+        
+        // foreach (var level in levels)
+        // {
+        //     foreach (var levelData in level.levels)
+        //     {
+        //         foreach (var hexagonalPostion in levelData.hexagonalPostions)
+        //         {
+        //             // Instantiate to grid cell
+        //             //Get the grid cell
+        //             Vector3Int cellPos = new Vector3Int(hexagonalPostion.x, hexagonalPostion.y, 0);
+        //             //Get the center of the grid cell
+        //             Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
+        //             var prefab = Instantiate(levelData.prefab, cellPos, Quaternion.Euler(0,0,90));
+        //             prefab.transform.position = cellCenterPos;
+        //             // Set the prefab to the center of the grid cell
+        //             // prefab.GetComponent<HexagonBlock>().x = hexagonalPostion.x;
+        //             // prefab.GetComponent<HexagonBlock>().y = hexagonalPostion.y;
+        //             prefab.GetComponent<GuideGrid>().text.text = "";
+        //             GridData.Instance.gridContainers.Add(new GridContainer(hexagonalPostion.x, hexagonalPostion.y, prefab));
+        //             prefab.name = "Behind: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
+        //             prefab.transform.SetParent(GameObject.FindWithTag("BehidGridPool").transform);
+
+
+        //         }
+        //     }
+        // }
     }
 
     public void FillTopGrid()
