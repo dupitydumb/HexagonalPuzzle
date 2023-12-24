@@ -18,7 +18,9 @@ public class GridContainer
 
 public class GridData : MonoBehaviour
 {
+    
     public List<GridContainer> gridContainers = new List<GridContainer>();
+
 
     public static GridData Instance;
 
@@ -33,4 +35,5 @@ public class GridData : MonoBehaviour
         }
     }
 
+    
 }

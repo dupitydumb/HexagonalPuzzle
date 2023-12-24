@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum HexagonType
 {
@@ -30,6 +31,10 @@ public class HexagonBlock : MonoBehaviour
     [SerializeField]
     private bool isMoving = false;
     private bool isDestroying = false;
+
+    
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -81,6 +86,7 @@ public class HexagonBlock : MonoBehaviour
             int previousIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
             GridData.Instance.gridContainers[previousIndex].gameObject = GridGenerator.Instance.guideGrid;
             y -= 1;
+            
 
             //Check After move down
             isMoving = false;

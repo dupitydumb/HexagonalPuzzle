@@ -9,8 +9,20 @@ public class GridGenerator : MonoBehaviour
     public Grid grid;
 
     public GameObject guideGrid;
+    
+    [
+        Header("Hexagon Blocks that will be spawned to the grid"),
+        Tooltip("Hexagon Blocks that will be spawned to the grid")
+    ]
     public GameObject[] hexagonBlocks;
 
+    [Space(30)]
+    [Header("Top Grid Where Hexagon Blocks will be spawned")]
+    public List<GridContainer> topGridContainers = new List<GridContainer>();
+    public Vector3[] topGridCellPos;
+
+    [Header("Is this a guide grid?")]
+    [Tooltip("If this is a guide grid, it will generate a grid with text on it")]
     public bool isGuideGrid = false;
 
     public static GridGenerator Instance;
@@ -30,20 +42,30 @@ public class GridGenerator : MonoBehaviour
     void Start()
     {
         Time.timeScale = 0f;
-        PlacePrefab();
         if (isGuideGrid == true)
         {
             GenerateGuideGrid();
         }
-        initializedHexagonBlocks();
-        
-        Time.timeScale = 1f;
+        else
+        {
+            PlacePrefab();
+            initializedHexagonBlocks();
+            Time.timeScale = 1f;
+            CheckTopGrid();
+            AddTopGridCellPos();
+        }
         
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!isGuideGrid)
+        {
+            FillTopGrid();
+        }
+        
+        
         
     }
 
@@ -66,9 +88,6 @@ public class GridGenerator : MonoBehaviour
                 box.name = x + "," + y;
                 GridData.Instance.gridContainers.Add(new GridContainer(x, y, box));
 
-
-                
-
             }
         }
 
@@ -87,9 +106,11 @@ public class GridGenerator : MonoBehaviour
             int randomIndex = Random.Range(0, hexagonBlocks.Length);
             GameObject hexagonBlock = Instantiate(hexagonBlocks[randomIndex], GridData.Instance.gridContainers[i].gameObject.transform.position, Quaternion.Euler(0,0,90));
             hexagonBlock.transform.position = GridData.Instance.gridContainers[i].gameObject.transform.position;
+            //Set parent to grid container
+            hexagonBlock.transform.SetParent(GameObject.FindWithTag("HexagonBlockPool").transform);
             hexagonBlock.GetComponent<HexagonBlock>().x = GridData.Instance.gridContainers[i].x;
             hexagonBlock.GetComponent<HexagonBlock>().y = GridData.Instance.gridContainers[i].y;
-            hexagonBlock.name = "Hex" + GridData.Instance.gridContainers[i].x + "," + GridData.Instance.gridContainers[i].y;
+            hexagonBlock.name = "Hex" + GridData.Instance.gridContainers[i].x + ", " + GridData.Instance.gridContainers[i].y;
             GridData.Instance.gridContainers[i].gameObject = hexagonBlock;
         }
     }
@@ -114,11 +135,68 @@ public class GridGenerator : MonoBehaviour
                     // prefab.GetComponent<HexagonBlock>().y = hexagonalPostion.y;
                     prefab.GetComponent<GuideGrid>().text.text = "";
                     GridData.Instance.gridContainers.Add(new GridContainer(hexagonalPostion.x, hexagonalPostion.y, prefab));
-                    prefab.name = "Hex" + hexagonalPostion.x + "," + hexagonalPostion.y;
+                    prefab.name = "Behind: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
+                    prefab.transform.SetParent(GameObject.FindWithTag("BehidGridPool").transform);
 
 
                 }
             }
         }
     }
+
+    public void FillTopGrid()
+    {
+        for (int i = 0; i < topGridContainers.Count; i++)
+        {
+            if (topGridContainers[i].gameObject.tag == "GuideGrid")
+            {
+                int randomIndex = Random.Range(0, hexagonBlocks.Length);
+                GameObject hexagonBlock = Instantiate(hexagonBlocks[randomIndex], topGridCellPos[i], Quaternion.Euler(0,0,90));
+                hexagonBlock.transform.position = topGridCellPos[i];
+                hexagonBlock.GetComponent<HexagonBlock>().x = topGridContainers[i].x;
+                hexagonBlock.GetComponent<HexagonBlock>().y = topGridContainers[i].y;
+                hexagonBlock.name = "Hex" + topGridContainers[i].x + "," + topGridContainers[i].y;
+                topGridContainers[i].gameObject = hexagonBlock;
+                hexagonBlock.transform.SetParent(GameObject.FindWithTag("HexagonBlockPool").transform);
+            }
+            
+        }
+    }
+
+    public void CheckTopGrid()
+    {
+        //Get the highest y value
+        int highestY = 0;
+        foreach (GridContainer gridContainer in GridData.Instance.gridContainers)
+        {
+            if (gridContainer.y > highestY)
+            {
+                highestY = gridContainer.y;
+            }
+        }
+        //Find the grid with the highest y value in gridContainers
+        foreach (GridContainer gridContainer in GridData.Instance.gridContainers)
+        {
+            if (gridContainer.y == highestY)
+            {
+                topGridContainers.Add(gridContainer);
+                //Add top grid vector3Int to topGridCellPos
+                
+            }
+        }
+        topGridCellPos = new Vector3[topGridContainers.Count];
+        
+        
+    }
+
+    void AddTopGridCellPos()
+    {
+        for (int i = 0; i < topGridContainers.Count; i++)
+        {
+            //Add Vector3 to topGridCellPos gameobject transform position
+            topGridCellPos[i] = topGridContainers[i].gameObject.transform.position;
+        }
+    }
+
+    
 }
