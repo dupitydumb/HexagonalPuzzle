@@ -268,20 +268,18 @@ public class GridGenerator : MonoBehaviour
         }
 
         //Check if all objectives are completed
+
         foreach (var levelObjective in levelObjectives)
         {
             if (levelObjective.isCompleted == false)
             {
                 return;
             }
-            else if (levelObjective.isCompleted == true)
-            {
-                //Level Complete
-                LevelComplete();
-                Debug.Log("Level Complete All");
-            }
-            
         }
+
+        //Level Complete
+        LevelComplete();
+        Debug.Log("Level Complete All");
     }    
 
     public void LevelComplete()
