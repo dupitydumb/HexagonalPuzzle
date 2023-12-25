@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GridGenerator : MonoBehaviour
 {
+
+
     public LevelGameData levels;
     
     public Grid grid;
@@ -27,6 +29,16 @@ public class GridGenerator : MonoBehaviour
 
     public static GridGenerator Instance;
 
+    [Header("In Game Score")]
+    public int RedHex;
+    public int BlueHex;
+    public int GreenHex;
+    public int YellowHex;
+    public int PurpleHex;
+    public int OrangeHex;
+    public int WhiteHex;
+
+    
     void Awake()
     {
         if (Instance == null)
@@ -69,162 +81,172 @@ public class GridGenerator : MonoBehaviour
         
     }
 
-    public void GenerateGuideGrid()
-    {
-        //Generate Hexagonal Grid
-        int hexagonalX = 7;
-        int hexagonalY = 15;    
-    
-
-        for (int x = -5; x < hexagonalX; x++)
+    #region Initialized Level
+        public void GenerateGuideGrid()
         {
-            for (int y = -2; y < hexagonalY; y++)
+            //Generate Hexagonal Grid
+            int hexagonalX = 7;
+            int hexagonalY = 15;    
+        
+    
+            for (int x = -5; x < hexagonalX; x++)
             {
-                //Check if the cell is empty
-                Vector3Int cellPos = new Vector3Int(x, y, 0);
-                Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
-                GameObject box = Instantiate(guideGrid, cellCenterPos, Quaternion.Euler(0,0,90));
-                box.GetComponent<GuideGrid>().text.text = x + "," + y;
-                box.name = x + "," + y;
-                GridData.Instance.gridContainers.Add(new GridContainer(x, y, box));
-
+                for (int y = -2; y < hexagonalY; y++)
+                {
+                    //Check if the cell is empty
+                    Vector3Int cellPos = new Vector3Int(x, y, 0);
+                    Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
+                    GameObject box = Instantiate(guideGrid, cellCenterPos, Quaternion.Euler(0,0,90));
+                    box.GetComponent<GuideGrid>().text.text = x + "," + y;
+                    box.name = x + "," + y;
+                    GridData.Instance.gridContainers.Add(new GridContainer(x, y, box));
+    
+                }
             }
-        }
-
-        
-    }
-
-    //Check if top of the grid is empty
     
-
-    
-    //Place randomize hexagon blocks to Grid Container
-    public void initializedHexagonBlocks()
-    {
-        for (int i = 0; i < GridData.Instance.gridContainers.Count; i++)
-        {
-            int randomIndex = Random.Range(0, hexagonBlocks.Length);
-            GameObject hexagonBlock = Instantiate(hexagonBlocks[randomIndex], GridData.Instance.gridContainers[i].gameObject.transform.position, Quaternion.Euler(0,0,90));
-            hexagonBlock.transform.position = GridData.Instance.gridContainers[i].gameObject.transform.position;
-            //Set parent to grid container
-            hexagonBlock.transform.SetParent(GameObject.FindWithTag("HexagonBlockPool").transform);
-            hexagonBlock.GetComponent<HexagonBlock>().x = GridData.Instance.gridContainers[i].x;
-            hexagonBlock.GetComponent<HexagonBlock>().y = GridData.Instance.gridContainers[i].y;
-            hexagonBlock.name = "Hex" + GridData.Instance.gridContainers[i].x + ", " + GridData.Instance.gridContainers[i].y;
-            GridData.Instance.gridContainers[i].gameObject = hexagonBlock;
-        }
-    }
-
-    void PlacePrefab()
-    {
-        
-        int currentLevel = levels.levelNumber;
-        Levels level = levels.levels[currentLevel];
-
-        foreach (var levelData in level.levels)
-        {
-            foreach (var hexagonalPostion in levelData.hexagonalPostions)
-            {
-                // Instantiate to grid cell
-                //Get the grid cell
-                Vector3Int cellPos = new Vector3Int(hexagonalPostion.x, hexagonalPostion.y, 0);
-                //Get the center of the grid cell
-                Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
-                var prefab = Instantiate(levelData.prefab, cellPos, Quaternion.Euler(0,0,90));
-                prefab.transform.position = cellCenterPos;
-                // Set the prefab to the center of the grid cell
-                // prefab.GetComponent<HexagonBlock>().x = hexagonalPostion.x;
-                // prefab.GetComponent<HexagonBlock>().y = hexagonalPostion.y;
-                prefab.GetComponent<GuideGrid>().text.text = "";
-                GridData.Instance.gridContainers.Add(new GridContainer(hexagonalPostion.x, hexagonalPostion.y, prefab));
-                prefab.name = "Behind: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
-                prefab.transform.SetParent(GameObject.FindWithTag("BehidGridPool").transform);
-            }    
-        }
-        
-        
-        
-        
-        // foreach (var level in levels)
-        // {
-        //     foreach (var levelData in level.levels)
-        //     {
-        //         foreach (var hexagonalPostion in levelData.hexagonalPostions)
-        //         {
-        //             // Instantiate to grid cell
-        //             //Get the grid cell
-        //             Vector3Int cellPos = new Vector3Int(hexagonalPostion.x, hexagonalPostion.y, 0);
-        //             //Get the center of the grid cell
-        //             Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
-        //             var prefab = Instantiate(levelData.prefab, cellPos, Quaternion.Euler(0,0,90));
-        //             prefab.transform.position = cellCenterPos;
-        //             // Set the prefab to the center of the grid cell
-        //             // prefab.GetComponent<HexagonBlock>().x = hexagonalPostion.x;
-        //             // prefab.GetComponent<HexagonBlock>().y = hexagonalPostion.y;
-        //             prefab.GetComponent<GuideGrid>().text.text = "";
-        //             GridData.Instance.gridContainers.Add(new GridContainer(hexagonalPostion.x, hexagonalPostion.y, prefab));
-        //             prefab.name = "Behind: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
-        //             prefab.transform.SetParent(GameObject.FindWithTag("BehidGridPool").transform);
-
-
-        //         }
-        //     }
-        // }
-    }
-
-    public void FillTopGrid()
-    {
-        for (int i = 0; i < topGridContainers.Count; i++)
-        {
-            if (topGridContainers[i].gameObject.tag == "GuideGrid")
-            {
-                int randomIndex = Random.Range(0, hexagonBlocks.Length);
-                GameObject hexagonBlock = Instantiate(hexagonBlocks[randomIndex], topGridCellPos[i], Quaternion.Euler(0,0,90));
-                hexagonBlock.transform.position = topGridCellPos[i];
-                hexagonBlock.GetComponent<HexagonBlock>().x = topGridContainers[i].x;
-                hexagonBlock.GetComponent<HexagonBlock>().y = topGridContainers[i].y;
-                hexagonBlock.name = "Hex" + topGridContainers[i].x + "," + topGridContainers[i].y;
-                topGridContainers[i].gameObject = hexagonBlock;
-                hexagonBlock.transform.SetParent(GameObject.FindWithTag("HexagonBlockPool").transform);
-            }
             
         }
-    }
-
-    public void CheckTopGrid()
-    {
-        //Get the highest y value
-        int highestY = 0;
-        foreach (GridContainer gridContainer in GridData.Instance.gridContainers)
+    
+        //Check if top of the grid is empty
+        
+    
+        
+        //Place randomize hexagon blocks to Grid Container
+        public void initializedHexagonBlocks()
         {
-            if (gridContainer.y > highestY)
+            for (int i = 0; i < GridData.Instance.gridContainers.Count; i++)
             {
-                highestY = gridContainer.y;
+                int randomIndex = Random.Range(0, hexagonBlocks.Length);
+                GameObject hexagonBlock = Instantiate(hexagonBlocks[randomIndex], GridData.Instance.gridContainers[i].gameObject.transform.position, Quaternion.Euler(0,0,90));
+                hexagonBlock.transform.position = GridData.Instance.gridContainers[i].gameObject.transform.position;
+                //Set parent to grid container
+                hexagonBlock.transform.SetParent(GameObject.FindWithTag("HexagonBlockPool").transform);
+                hexagonBlock.GetComponent<HexagonBlock>().x = GridData.Instance.gridContainers[i].x;
+                hexagonBlock.GetComponent<HexagonBlock>().y = GridData.Instance.gridContainers[i].y;
+                hexagonBlock.name = "Hex" + GridData.Instance.gridContainers[i].x + ", " + GridData.Instance.gridContainers[i].y;
+                GridData.Instance.gridContainers[i].gameObject = hexagonBlock;
             }
         }
-        //Find the grid with the highest y value in gridContainers
-        foreach (GridContainer gridContainer in GridData.Instance.gridContainers)
+    
+        void PlacePrefab()
         {
-            if (gridContainer.y == highestY)
+            
+            int currentLevel = levels.levelNumber;
+            Levels level = levels.levels[currentLevel];
+    
+            foreach (var levelData in level.levels)
             {
-                topGridContainers.Add(gridContainer);
-                //Add top grid vector3Int to topGridCellPos
+                foreach (var hexagonalPostion in levelData.hexagonalPostions)
+                {
+                    // Instantiate to grid cell
+                    //Get the grid cell
+                    Vector3Int cellPos = new Vector3Int(hexagonalPostion.x, hexagonalPostion.y, 0);
+                    //Get the center of the grid cell
+                    Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
+                    var prefab = Instantiate(levelData.prefab, cellPos, Quaternion.Euler(0,0,90));
+                    prefab.transform.position = cellCenterPos;
+                    // Set the prefab to the center of the grid cell
+                    // prefab.GetComponent<HexagonBlock>().x = hexagonalPostion.x;
+                    // prefab.GetComponent<HexagonBlock>().y = hexagonalPostion.y;
+                    prefab.GetComponent<GuideGrid>().text.text = "";
+                    GridData.Instance.gridContainers.Add(new GridContainer(hexagonalPostion.x, hexagonalPostion.y, prefab));
+                    prefab.name = "Behind: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
+                    prefab.transform.SetParent(GameObject.FindWithTag("BehidGridPool").transform);
+                }    
+            }
+            
+            
+           
+        }
+    #endregion
+
+    public void AddScore(HexagonType type)
+        {
+            switch (type)
+            {
+                case HexagonType.Red:
+                    RedHex++;
+                    break;
+                case HexagonType.Blue:
+                    BlueHex++;
+                    break;
+                case HexagonType.Green:
+                    GreenHex++;
+                    break;
+                case HexagonType.Yellow:
+                    YellowHex++;
+                    break;
+                case HexagonType.Purple:
+                    PurpleHex++;
+                    break;
+                case HexagonType.Orange:
+                    OrangeHex++;
+                    break;
+                case HexagonType.White:
+                    WhiteHex++;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    
+
+    #region Fill Top Grid
+        public void FillTopGrid()
+        {
+            for (int i = 0; i < topGridContainers.Count; i++)
+            {
+                if (topGridContainers[i].gameObject.tag == "GuideGrid")
+                {
+                    int randomIndex = Random.Range(0, hexagonBlocks.Length);
+                    GameObject hexagonBlock = Instantiate(hexagonBlocks[randomIndex], topGridCellPos[i], Quaternion.Euler(0,0,90));
+                    hexagonBlock.transform.position = topGridCellPos[i];
+                    hexagonBlock.GetComponent<HexagonBlock>().x = topGridContainers[i].x;
+                    hexagonBlock.GetComponent<HexagonBlock>().y = topGridContainers[i].y;
+                    hexagonBlock.name = "Hex" + topGridContainers[i].x + "," + topGridContainers[i].y;
+                    topGridContainers[i].gameObject = hexagonBlock;
+                    hexagonBlock.transform.SetParent(GameObject.FindWithTag("HexagonBlockPool").transform);
+                }
                 
             }
         }
-        topGridCellPos = new Vector3[topGridContainers.Count];
-        
-        
-    }
-
-    void AddTopGridCellPos()
-    {
-        for (int i = 0; i < topGridContainers.Count; i++)
+    
+        public void CheckTopGrid()
         {
-            //Add Vector3 to topGridCellPos gameobject transform position
-            topGridCellPos[i] = topGridContainers[i].gameObject.transform.position;
+            //Get the highest y value
+            int highestY = 0;
+            foreach (GridContainer gridContainer in GridData.Instance.gridContainers)
+            {
+                if (gridContainer.y > highestY)
+                {
+                    highestY = gridContainer.y;
+                }
+            }
+            //Find the grid with the highest y value in gridContainers
+            foreach (GridContainer gridContainer in GridData.Instance.gridContainers)
+            {
+                if (gridContainer.y == highestY)
+                {
+                    topGridContainers.Add(gridContainer);
+                    //Add top grid vector3Int to topGridCellPos
+                    
+                }
+            }
+            topGridCellPos = new Vector3[topGridContainers.Count];
+            
+            
         }
-    }
+    
+        void AddTopGridCellPos()
+        {
+            for (int i = 0; i < topGridContainers.Count; i++)
+            {
+                //Add Vector3 to topGridCellPos gameobject transform position
+                topGridCellPos[i] = topGridContainers[i].gameObject.transform.position;
+            }
+        }
+    #endregion
 
     
 }

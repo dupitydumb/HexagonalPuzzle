@@ -11,6 +11,7 @@ public enum HexagonType
     Yellow,
     Purple,
     Orange,
+    White,
     Empty
 }
 
@@ -73,6 +74,7 @@ public class HexagonBlock : MonoBehaviour
     {
         //Instantiate a new hexagon block to previous position
         isMoving = true;
+        
         Vector3Int cellPos = new Vector3Int(x, y - 1, 0);
         Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
         transform.position = Vector3.MoveTowards(transform.position, cellCenterPos, speed * Time.deltaTime);
@@ -136,6 +138,8 @@ public class HexagonBlock : MonoBehaviour
         int index = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
         LeanTween.scale(this.gameObject, new Vector3(2, 2, 0), 0.8f).setEase(LeanTweenType.easeInBack).setOnComplete(() => 
         {
+            GridGenerator.Instance.AddScore(hexagonType);
+            Log("Destroying : " + hexagonType.ToString());
             GridData.Instance.gridContainers[index].gameObject = GridGenerator.Instance.guideGrid;
             Destroy(this.gameObject);
             Log("Destroying : " + hexagonType.ToString() + " at " + x + ", " + y);
