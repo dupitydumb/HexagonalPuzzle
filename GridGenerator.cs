@@ -278,7 +278,7 @@ public class GridGenerator : MonoBehaviour
             {
                 //Level Complete
                 LevelComplete();
-                Debug.Log("Level Complete");
+                Debug.Log("Level Complete All");
             }
             
         }
