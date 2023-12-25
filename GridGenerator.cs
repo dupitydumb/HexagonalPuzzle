@@ -293,7 +293,7 @@ public class GridGenerator : MonoBehaviour
     {
         Vector3Int cellPos = new Vector3Int(x, y, 0);
         Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
-        GameObject bomb = Instantiate(bombItem, cellCenterPos, Quaternion.identity);
+        GameObject bomb = Instantiate(bombItem, cellCenterPos, Quaternion.Euler(0,0,90));
         int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
         GridData.Instance.gridContainers[gridIndex].gameObject = bomb;
         bomb.GetComponent<BombItems>().xPos = x;

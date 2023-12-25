@@ -41,22 +41,34 @@ public class BombItems : MonoBehaviour
             new Vector2(-1, 0)
         };
 
+        int xLimitLow = GridData.Instance.xLimitLow;
+        int xLimitHigh = GridData.Instance.xLimitHigh;
+        int yLimitLow = GridData.Instance.yLimitLow;
+        int yLimitHigh = GridData.Instance.yLimitHigh;
 
         Vector2[] neighborPos = new Vector2[5];
         for (int i = 0; i < 5; i++)
         {
-            neighborPos[i] = new Vector2(transform.position.x + offsets[i].x, transform.position.y + offsets[i].y);
-            //Find the block in the grid
-            foreach (GridContainer gridContainer in gridData.gridContainers)
+            if (xPos + offsets[i].x >= xLimitLow && xPos + offsets[i].x <= xLimitHigh && yPos + offsets[i].y >= yLimitLow && yPos + offsets[i].y <= yLimitHigh)
             {
-                if (gridContainer.x == neighborPos[i].x && gridContainer.y == neighborPos[i].y)
-                {
-                    //Destroy the block
-                    int gridIndex = gridData.gridContainers.FindIndex(x => x.x == gridContainer.x && x.y == gridContainer.y);
-                    gridData.gridContainers[gridIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
-                }
+                neighborPos[i] = new Vector2(xPos + offsets[i].x, yPos + offsets[i].y);
             }
-        }   
+        }
+
+        foreach (Vector2 pos in neighborPos)
+        {
+            int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == pos.x && element.y == pos.y && element.gameObject.tag == "HexagonBlock");
+            if (gridIndex != -1)
+            {
+                GridData.Instance.gridContainers[gridIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
+            }
+            else
+            {
+                DestroyBomb();
+            }
+            
+            
+        }
 
         DestroyBomb();
     }

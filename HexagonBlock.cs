@@ -64,7 +64,7 @@ public class HexagonBlock : MonoBehaviour
     /// </summary>
     void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !isMoving && !isDestroying)
         {
             CheckAdjacentSameType(this);
             
@@ -90,14 +90,8 @@ public class HexagonBlock : MonoBehaviour
             int previousIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
             GridData.Instance.gridContainers[previousIndex].gameObject = GridGenerator.Instance.guideGrid;
             y -= 1;
-            
-
-            //Check After move down
             isMoving = false;
-            // if (isMoving == false)
-            // {
-            //     CheckAdjacentSameType(this);
-            // }
+            
         }
         
     }
@@ -109,7 +103,12 @@ public class HexagonBlock : MonoBehaviour
         {
             Vector3Int cellPos = new Vector3Int(x, y - 1, 0);
             Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
-            if (GridData.Instance.gridContainers.Exists(element => element.x == x && element.y == y - 1 && element.gameObject.tag == "HexagonBlock"))
+            //If below is empty return true
+            if (GridData.Instance.gridContainers.Exists(element => element.x == x && element.y == y - 1 && element.gameObject.tag == "GuideGrid"))
+            {
+                return true;
+            }
+            if (GridData.Instance.gridContainers.Exists(element => element.x == x && element.y == y - 1 && element.gameObject != null && element.gameObject.tag != "HexagonBlock"))
             {
                 return false;
             }
@@ -118,11 +117,7 @@ public class HexagonBlock : MonoBehaviour
             {
                 return false;
             }
-            //If below is empty return true
-            if (GridData.Instance.gridContainers.Exists(element => element.x == x && element.y == y - 1 && element.gameObject.tag == "GuideGrid"))
-            {
-                return true;
-            }
+            
             return false;
         }
         else
@@ -141,10 +136,10 @@ public class HexagonBlock : MonoBehaviour
         LeanTween.scale(this.gameObject, new Vector3(2, 2, 0), 0.8f).setEase(LeanTweenType.easeInBack).setOnComplete(() => 
         {
             GridGenerator.Instance.AddScore(hexagonType);
-            Log("Destroying : " + hexagonType.ToString());
+            
             GridData.Instance.gridContainers[index].gameObject = GridGenerator.Instance.guideGrid;
             Destroy(this.gameObject);
-            Log("Destroying : " + hexagonType.ToString() + " at " + x + ", " + y);
+            
         });
         
         
@@ -153,7 +148,7 @@ public class HexagonBlock : MonoBehaviour
    
     public void CheckAdjacentSameType(HexagonBlock startBlock)
     {   
-        Log("Checking : " + startBlock.hexagonType.ToString() + " at " + startBlock.x + ", " + startBlock.y);   
+        
         if (startBlock.isMoving)
         {
             return;
@@ -197,7 +192,7 @@ public class HexagonBlock : MonoBehaviour
                         }
                         sameTypeNeighbors.Add(neighborBlock);
                         sameTypeNeighbors.Add(currentBlock);
-                        Log("Same type neighbor found");
+                        
                         
                     }
                     
@@ -208,32 +203,32 @@ public class HexagonBlock : MonoBehaviour
             // If there are more than 3 neighbors of the same type, destroy them
             if (sameTypeNeighbors.Count >= 2)
             {
-                if (sameTypeNeighbors.Count > 4)
+                if (sameTypeNeighbors.Count >= 4)
                 {
-                    //Spawn a bomb
+                    
+                    // Spawn a bomb
+                    foreach (HexagonBlock neighborBlock in sameTypeNeighbors)
+                    {
+                        // Add the neighbor to the visited set and the queue
+                        visited.Add(neighborBlock);
+                        queue.Enqueue(neighborBlock);
+
+                        neighborBlock.DestroyHexagonBlock();
+                    }
+
                     GridGenerator.Instance.SpawnBomb(currentBlock.x, currentBlock.y);
                     Log("Spawn a bomb");
-                } 
-                
-                foreach (HexagonBlock neighborBlock in sameTypeNeighbors)
-                {
-                    
-                    // Add the neighbor to the visited set and the queue
-                    visited.Add(neighborBlock);
-                    
-                    queue.Enqueue(neighborBlock);
-
-                    neighborBlock.gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
-                    // Destroy the neighbor block
-                    // Remove the neighbor block from the grid
-                    // int neighborIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == neighborBlock.x && element.y == neighborBlock.y);
-                    // GridData.Instance.gridContainers[neighborIndex].gameObject = GridGenerator.Instance.guideGrid;
                     
                 }
-                
-                //Spawn a bomb if 5 same type
-                   
-                    
+
+                foreach (HexagonBlock neighborBlock in sameTypeNeighbors)
+                {
+                    // Add the neighbor to the visited set and the queue
+                    visited.Add(neighborBlock);
+                    queue.Enqueue(neighborBlock);
+
+                    neighborBlock.DestroyHexagonBlock();
+                }
             }
         }
     }
