@@ -15,8 +15,16 @@ public class Levels : ScriptableObject
     [SerializeField]
     public List<LevelData> levels = new List<LevelData>();
 
+
+
+    void Awake()
+    {
+        Debug.Log("Awake");
+    }
     
 }
+
+
 
 [System.Serializable]
 public class LevelData
@@ -34,7 +42,10 @@ public class LevelObjectives
     public HexagonType hexagonType;
     public int count;
 
-}    
+    public bool isCompleted;
+}
+
+
 
 
 [System.Serializable]

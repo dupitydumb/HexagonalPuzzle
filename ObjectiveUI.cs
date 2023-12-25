@@ -9,6 +9,9 @@ public class ObjectiveUI : MonoBehaviour
 
     private List<LevelObjectives> levelObjectives = new List<LevelObjectives>();
     public GameObject prefabUI;
+
+    private List<GameObject> objectiveUI = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,7 +41,7 @@ public class ObjectiveUI : MonoBehaviour
             go.transform.GetChild(1).GetComponent<TMP_Text>().text = levelObjectives[i].count.ToString();
             Image img = go.transform.GetChild(0).GetComponent<Image>();
             HexagonType hexagonType = levelObjectives[i].hexagonType;
-            Debug.Log(hexagonType);
+            objectiveUI.Add(go);
             
             switch (hexagonType)
             {
@@ -79,5 +82,11 @@ public class ObjectiveUI : MonoBehaviour
             
 
         }
+    }
+
+    public void UpdateObjectiveUI()
+    {
+        //update objective UI text from GridGenerator
+        
     }
 }

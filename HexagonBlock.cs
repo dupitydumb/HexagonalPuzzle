@@ -12,6 +12,8 @@ public enum HexagonType
     Purple,
     Orange,
     White,
+
+    Bomb,
     Empty
 }
 
@@ -146,19 +148,6 @@ public class HexagonBlock : MonoBehaviour
         });
         
         
-
-        // if (CheckAdjacentSameType() == true)
-        // {
-        //     int index = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
-        //     GridData.Instance.gridContainers[index].gameObject = GridGenerator.Instance.guideGrid;
-        //     Destroy(this.gameObject);
-            
-        // }
-        // else
-        // {
-        //     Debug.Log("No adjacent same type");
-        // }
-        
     }
 
    
@@ -219,6 +208,13 @@ public class HexagonBlock : MonoBehaviour
             // If there are more than 3 neighbors of the same type, destroy them
             if (sameTypeNeighbors.Count >= 2)
             {
+                if (sameTypeNeighbors.Count > 4)
+                {
+                    //Spawn a bomb
+                    GridGenerator.Instance.SpawnBomb(currentBlock.x, currentBlock.y);
+                    Log("Spawn a bomb");
+                } 
+                
                 foreach (HexagonBlock neighborBlock in sameTypeNeighbors)
                 {
                     
@@ -234,9 +230,10 @@ public class HexagonBlock : MonoBehaviour
                     // GridData.Instance.gridContainers[neighborIndex].gameObject = GridGenerator.Instance.guideGrid;
                     
                 }
-                // currentBlock.gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
-                // int index = GridData.Instance.gridContainers.FindIndex(element => element.x == currentBlock.x && element.y == currentBlock.y);
-                // GridData.Instance.gridContainers[index].gameObject = GridGenerator.Instance.guideGrid;
+                
+                //Spawn a bomb if 5 same type
+                   
+                    
             }
         }
     }

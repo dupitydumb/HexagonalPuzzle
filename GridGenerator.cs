@@ -5,18 +5,16 @@ using UnityEngine;
 public class GridGenerator : MonoBehaviour
 {
 
-
     public LevelGameData levels;
     
     public Grid grid;
 
     public GameObject guideGrid;
     
-    [
-        Header("Hexagon Blocks that will be spawned to the grid"),
-        Tooltip("Hexagon Blocks that will be spawned to the grid")
+    [Header("Hexagon Blocks that will be spawned to the grid"), Tooltip("Hexagon Blocks that will be spawned to the grid")
     ]
     public GameObject[] hexagonBlocks;
+    public GameObject bombItem;
 
     [Space(30)]
     [Header("Top Grid Where Hexagon Blocks will be spawned")]
@@ -38,6 +36,7 @@ public class GridGenerator : MonoBehaviour
     public int OrangeHex;
     public int WhiteHex;
 
+    public GameObject CompletePanel;
     
     void Awake()
     {
@@ -54,6 +53,7 @@ public class GridGenerator : MonoBehaviour
     void Start()
     {
         Time.timeScale = 0f;
+        CompletePanel.SetActive(false);
         if (isGuideGrid == true)
         {
             GenerateGuideGrid();
@@ -65,6 +65,7 @@ public class GridGenerator : MonoBehaviour
             Time.timeScale = 1f;
             CheckTopGrid();
             AddTopGridCellPos();
+            
         }
         
     }
@@ -75,6 +76,7 @@ public class GridGenerator : MonoBehaviour
         if (!isGuideGrid)
         {
             FillTopGrid();
+            CheckScore();
         }
         
         
@@ -190,6 +192,116 @@ public class GridGenerator : MonoBehaviour
             }
         }
 
+    //Check Score if it meets the objective
+    
+    public void CheckScore()
+    {
+        //Get the current level
+        int currentLevel = levels.levelNumber;
+        Levels level = levels.levels[currentLevel];
+        //Get the level objectives
+        List<LevelObjectives> levelObjectives = level.levelObjectives;
+        //Check if the score meets the objective
+        foreach (var levelObjective in levelObjectives)
+        {
+            switch (levelObjective.hexagonType)
+            {
+                case HexagonType.Red:
+                    if (RedHex >= levelObjective.count)
+                    {
+                        //Level Complete
+                        levelObjective.isCompleted = true;
+                        Debug.Log("Level Complete");
+                    }
+                    break;
+                case HexagonType.Blue:
+                    if (BlueHex >= levelObjective.count)
+                    {
+                        //Level Complete
+                        levelObjective.isCompleted = true;
+                        Debug.Log("Level Complete");
+                    }
+                    break;
+                case HexagonType.Green:
+                    if (GreenHex >= levelObjective.count)
+                    {
+                        //Level Complete
+                        levelObjective.isCompleted = true;
+                        Debug.Log("Level Complete");
+                    }
+                    break;
+                case HexagonType.Yellow:
+                    if (YellowHex >= levelObjective.count)
+                    {
+                        //Level Complete
+                        levelObjective.isCompleted = true;
+                        Debug.Log("Level Complete");
+                    }
+                    break;
+                case HexagonType.Purple:
+                    if (PurpleHex >= levelObjective.count)
+                    {
+                        //Level Complete
+                        levelObjective.isCompleted = true;
+                        Debug.Log("Level Complete");
+                    }
+                    break;
+                case HexagonType.Orange:
+                    if (OrangeHex >= levelObjective.count)
+                    {
+                        //Level Complete
+                        levelObjective.isCompleted = true;
+                        Debug.Log("Level Complete");
+                    }
+                    break;
+                case HexagonType.White:
+                    if (WhiteHex >= levelObjective.count)
+                    {
+                        //Level Complete
+                        levelObjective.isCompleted = true;
+                        Debug.Log("Level Complete");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //Check if all objectives are completed
+        foreach (var levelObjective in levelObjectives)
+        {
+            if (levelObjective.isCompleted == false)
+            {
+                return;
+            }
+            else if (levelObjective.isCompleted == true)
+            {
+                //Level Complete
+                LevelComplete();
+                Debug.Log("Level Complete");
+            }
+            
+        }
+    }    
+
+    public void LevelComplete()
+    {
+        Time.timeScale = 0f;
+        CompletePanel.SetActive(true);
+    }
+
+
+    public void SpawnBomb(int x, int y)
+    {
+        Vector3Int cellPos = new Vector3Int(x, y, 0);
+        Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
+        GameObject bomb = Instantiate(bombItem, cellCenterPos, Quaternion.identity);
+        int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
+        GridData.Instance.gridContainers[gridIndex].gameObject = bomb;
+        bomb.GetComponent<BombItems>().xPos = x;
+        bomb.GetComponent<BombItems>().yPos = y;
+    }
+    
     
 
     #region Fill Top Grid
