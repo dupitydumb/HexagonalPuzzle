@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Levels", menuName = "ScriptableObjects/Levels", order = 1)]
 public class Levels : ScriptableObject
 {
+    public int levelNumber;
 
     [Header("Level Objectives")]
     [Space(10)]
@@ -14,13 +15,7 @@ public class Levels : ScriptableObject
     [Space(10)]
     [SerializeField]
     public List<LevelData> levels = new List<LevelData>();
-
-
-
-    void Awake()
-    {
-        Debug.Log("Awake");
-    }
+    
     
 }
 

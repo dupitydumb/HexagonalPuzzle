@@ -62,10 +62,7 @@ public class BombItems : MonoBehaviour
             {
                 GridData.Instance.gridContainers[gridIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
             }
-            else
-            {
-                DestroyBomb();
-            }
+           
             
             
         }
@@ -79,6 +76,7 @@ public class BombItems : MonoBehaviour
         LeanTween.scale(gameObject, new Vector3(3, 3, 0), 0.5f).setOnComplete(() => {
             int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == xPos && element.y == yPos);
             gridData.gridContainers[gridIndex].gameObject = GridGenerator.Instance.guideGrid;
+            GridGenerator.Instance.isBombing = false;
             Destroy(gameObject);
         });
         

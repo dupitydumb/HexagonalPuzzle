@@ -15,6 +15,8 @@ public class GridGenerator : MonoBehaviour
     ]
     public GameObject[] hexagonBlocks;
     public GameObject bombItem;
+    [HideInInspector]
+    public bool isBombing = false;
 
     [Space(30)]
     [Header("Top Grid Where Hexagon Blocks will be spawned")]
@@ -291,6 +293,7 @@ public class GridGenerator : MonoBehaviour
 
     public void SpawnBomb(int x, int y)
     {
+        isBombing = true;
         Vector3Int cellPos = new Vector3Int(x, y, 0);
         Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
         GameObject bomb = Instantiate(bombItem, cellCenterPos, Quaternion.Euler(0,0,90));

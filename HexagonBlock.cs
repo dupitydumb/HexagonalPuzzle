@@ -49,7 +49,7 @@ public class HexagonBlock : MonoBehaviour
     void Update()
     {
         
-        if (CheckBelow() == true)
+        if (CheckBelow())
         {
             MoveDown();
         }
@@ -64,7 +64,7 @@ public class HexagonBlock : MonoBehaviour
     /// </summary>
     void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0) && !isMoving && !isDestroying)
+        if (Input.GetMouseButtonDown(0) && !isMoving && !isDestroying && !GridGenerator.Instance.isBombing)
         {
             CheckAdjacentSameType(this);
             
@@ -74,15 +74,15 @@ public class HexagonBlock : MonoBehaviour
 
     private void MoveDown()
     {
-        //Instantiate a new hexagon block to previous position
+        Log("Move Down");
         isMoving = true;
-        
         Vector3Int cellPos = new Vector3Int(x, y - 1, 0);
         Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
         transform.position = Vector3.MoveTowards(transform.position, cellCenterPos, speed * Time.deltaTime);
+        
         if (transform.position == cellCenterPos)
         {
-            
+            isMoving = false;
             //Find Next position index from list
             int nextIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y - 1);
             GridData.Instance.gridContainers[nextIndex].gameObject = this.gameObject;
@@ -90,7 +90,7 @@ public class HexagonBlock : MonoBehaviour
             int previousIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
             GridData.Instance.gridContainers[previousIndex].gameObject = GridGenerator.Instance.guideGrid;
             y -= 1;
-            isMoving = false;
+            
             
         }
         
@@ -102,28 +102,20 @@ public class HexagonBlock : MonoBehaviour
         if (isDestroying == false)
         {
             Vector3Int cellPos = new Vector3Int(x, y - 1, 0);
-            Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
+            // Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
             //If below is empty return true
+
+            if (GridData.Instance == null || GridData.Instance.gridContainers == null)
+            {
+                return false;
+            }
             if (GridData.Instance.gridContainers.Exists(element => element.x == x && element.y == y - 1 && element.gameObject.tag == "GuideGrid"))
             {
                 return true;
             }
-            if (GridData.Instance.gridContainers.Exists(element => element.x == x && element.y == y - 1 && element.gameObject != null && element.gameObject.tag != "HexagonBlock"))
-            {
-                return false;
-            }
-            //If nothing below return false
-            if (!GridData.Instance.gridContainers.Exists(element => element.x == x && element.y == y - 1))
-            {
-                return false;
-            }
-            
-            return false;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;    
         
     }
 

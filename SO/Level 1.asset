@@ -12,13 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0960cc9e264a544d8fdd236122c4443, type: 3}
   m_Name: Level 1
   m_EditorClassIdentifier: 
+  levelNumber: 1
   levelObjectives:
   - hexagonType: 1
     count: 5
-    isCompleted: 1
+    isCompleted: 0
+  - hexagonType: 2
+    count: 30
+    isCompleted: 0
   - hexagonType: 0
     count: 5
-    isCompleted: 1
+    isCompleted: 0
   levels:
   - prefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
     hexagonalPostions:
