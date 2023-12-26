@@ -12,7 +12,14 @@ public class GuideGrid : MonoBehaviour
     void Start()
     {
         text = GetComponent<TMP_Text>();
-        textCanvas.SetActive(false);
+        if (GridGenerator.Instance.isGuideGrid)
+        {
+            textCanvas.SetActive(true);
+        }
+        else
+        {
+            textCanvas.SetActive(false);
+        }
     }
 
     // Update is called once per frame

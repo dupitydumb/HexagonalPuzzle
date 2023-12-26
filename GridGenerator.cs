@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GridGenerator : MonoBehaviour
 {
@@ -86,6 +87,8 @@ public class GridGenerator : MonoBehaviour
         
     }
 
+    public UnityEvent onGridChanges;
+
     #region Initialized Level
         public void GenerateGuideGrid()
         {
@@ -102,9 +105,9 @@ public class GridGenerator : MonoBehaviour
                     Vector3Int cellPos = new Vector3Int(x, y, 0);
                     Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
                     GameObject box = Instantiate(guideGrid, cellCenterPos, Quaternion.Euler(0,0,90));
-                    box.GetComponent<GuideGrid>().textCanvas.SetActive(true);
                     box.GetComponent<GuideGrid>().text.text = x + "," + y;
                     box.name = x + "," + y;
+                    box.GetComponent<GuideGrid>().textCanvas.SetActive(true);
                     GridData.Instance.gridContainers.Add(new GridContainer(x, y, box));
     
                 }
@@ -252,7 +255,7 @@ public class GridGenerator : MonoBehaviour
                         {
                             //Level Complete
                             levelObjective.isCompleted = true;
-                            Debug.Log("Level Complete");
+                            
                         }
                         break;
                     case HexagonType.Blue:
@@ -260,7 +263,7 @@ public class GridGenerator : MonoBehaviour
                         {
                             //Level Complete
                             levelObjective.isCompleted = true;
-                            Debug.Log("Level Complete");
+                            
                         }
                         break;
                     case HexagonType.Green:
@@ -268,7 +271,7 @@ public class GridGenerator : MonoBehaviour
                         {
                             //Level Complete
                             levelObjective.isCompleted = true;
-                            Debug.Log("Level Complete");
+                            
                         }
                         break;
                     case HexagonType.Yellow:
@@ -276,7 +279,7 @@ public class GridGenerator : MonoBehaviour
                         {
                             //Level Complete
                             levelObjective.isCompleted = true;
-                            Debug.Log("Level Complete");
+                            
                         }
                         break;
                     case HexagonType.Purple:
@@ -284,7 +287,7 @@ public class GridGenerator : MonoBehaviour
                         {
                             //Level Complete
                             levelObjective.isCompleted = true;
-                            Debug.Log("Level Complete");
+                            
                         }
                         break;
                     case HexagonType.Orange:
@@ -292,7 +295,7 @@ public class GridGenerator : MonoBehaviour
                         {
                             //Level Complete
                             levelObjective.isCompleted = true;
-                            Debug.Log("Level Complete");
+                            
                         }
                         break;
                     case HexagonType.White:
@@ -300,7 +303,7 @@ public class GridGenerator : MonoBehaviour
                         {
                             //Level Complete
                             levelObjective.isCompleted = true;
-                            Debug.Log("Level Complete");
+                            
                         }
                         break;
                     default:
