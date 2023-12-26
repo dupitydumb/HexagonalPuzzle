@@ -24,9 +24,7 @@ public class Levels : ScriptableObject
 [System.Serializable]
 public class LevelData
 {
-    public GameObject prefab;
     public List<HexagonalPostion> hexagonalPostions = new List<HexagonalPostion>();
-
     //Objectives
 
 }
@@ -46,13 +44,17 @@ public class LevelObjectives
 [System.Serializable]
 public class HexagonalPostion
 {
+    public GameObject hexagonPrefab;
     public int x;
     public int y;
 
-    public HexagonalPostion(int x, int y)
+    public HexagonalPostion(int x, int y, GameObject hexagonPrefab)
     {
+        this.hexagonPrefab = hexagonPrefab;
         this.x = x;
         this.y = y;
+        
     }
+    
 }    
 

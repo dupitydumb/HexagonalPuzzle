@@ -85,7 +85,7 @@ public class GridGenerator : MonoBehaviour
         
         
     }
-    
+
     #region Initialized Level
         public void GenerateGuideGrid()
         {
@@ -102,6 +102,7 @@ public class GridGenerator : MonoBehaviour
                     Vector3Int cellPos = new Vector3Int(x, y, 0);
                     Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
                     GameObject box = Instantiate(guideGrid, cellCenterPos, Quaternion.Euler(0,0,90));
+                    box.GetComponent<GuideGrid>().textCanvas.SetActive(true);
                     box.GetComponent<GuideGrid>().text.text = x + "," + y;
                     box.name = x + "," + y;
                     GridData.Instance.gridContainers.Add(new GridContainer(x, y, box));
@@ -119,18 +120,37 @@ public class GridGenerator : MonoBehaviour
         //Place randomize hexagon blocks to Grid Container
         public void initializedHexagonBlocks()
         {
-            for (int i = 0; i < GridData.Instance.gridContainers.Count; i++)
+            foreach (var gridContainer in GridData.Instance.gridContainers)
             {
-                int randomIndex = Random.Range(0, hexagonBlocks.Length);
-                GameObject hexagonBlock = Instantiate(hexagonBlocks[randomIndex], GridData.Instance.gridContainers[i].gameObject.transform.position, Quaternion.Euler(0,0,90));
-                hexagonBlock.transform.position = GridData.Instance.gridContainers[i].gameObject.transform.position;
-                //Set parent to grid container
-                hexagonBlock.transform.SetParent(GameObject.FindWithTag("HexagonBlockPool").transform);
-                hexagonBlock.GetComponent<HexagonBlock>().x = GridData.Instance.gridContainers[i].x;
-                hexagonBlock.GetComponent<HexagonBlock>().y = GridData.Instance.gridContainers[i].y;
-                hexagonBlock.name = "Hex" + GridData.Instance.gridContainers[i].x + ", " + GridData.Instance.gridContainers[i].y;
-                GridData.Instance.gridContainers[i].gameObject = hexagonBlock;
+                if (gridContainer.gameObject.tag == "GuideGrid")
+                {
+                    int randomIndex = Random.Range(0, hexagonBlocks.Length);
+                    GameObject hexagonBlock = Instantiate(hexagonBlocks[randomIndex], gridContainer.gameObject.transform.position, Quaternion.Euler(0,0,90));
+                    hexagonBlock.transform.position = gridContainer.gameObject.transform.position;
+                    //Set parent to grid container
+                    hexagonBlock.transform.SetParent(GameObject.FindWithTag("HexagonBlockPool").transform);
+                    hexagonBlock.GetComponent<HexagonBlock>().x = gridContainer.x;
+                    hexagonBlock.GetComponent<HexagonBlock>().y = gridContainer.y;
+                    hexagonBlock.name = "Hex" + gridContainer.x + ", " + gridContainer.y;
+                    gridContainer.gameObject = hexagonBlock;
+                }
             }
+            
+            
+            
+            
+            // for (int i = 0; i < GridData.Instance.gridContainers.Count; i++)
+            // {
+            //     int randomIndex = Random.Range(0, hexagonBlocks.Length);
+            //     GameObject hexagonBlock = Instantiate(hexagonBlocks[randomIndex], GridData.Instance.gridContainers[i].gameObject.transform.position, Quaternion.Euler(0,0,90));
+            //     hexagonBlock.transform.position = GridData.Instance.gridContainers[i].gameObject.transform.position;
+            //     //Set parent to grid container
+            //     hexagonBlock.transform.SetParent(GameObject.FindWithTag("HexagonBlockPool").transform);
+            //     hexagonBlock.GetComponent<HexagonBlock>().x = GridData.Instance.gridContainers[i].x;
+            //     hexagonBlock.GetComponent<HexagonBlock>().y = GridData.Instance.gridContainers[i].y;
+            //     hexagonBlock.name = "Hex" + GridData.Instance.gridContainers[i].x + ", " + GridData.Instance.gridContainers[i].y;
+            //     GridData.Instance.gridContainers[i].gameObject = hexagonBlock;
+            // }
         }
     
         void PlacePrefab()
@@ -148,12 +168,29 @@ public class GridGenerator : MonoBehaviour
                     Vector3Int cellPos = new Vector3Int(hexagonalPostion.x, hexagonalPostion.y, 0);
                     //Get the center of the grid cell
                     Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
-                    var prefab = Instantiate(levelData.prefab, cellPos, Quaternion.Euler(0,0,90));
+                    //Instantiate the prefab to the center of the grid cell
+                    GameObject prefab = Instantiate(hexagonalPostion.hexagonPrefab, cellCenterPos, Quaternion.Euler(0,0,90));
                     prefab.transform.position = cellCenterPos;
-                    // Set the prefab to the center of the grid cell
-                    // prefab.GetComponent<HexagonBlock>().x = hexagonalPostion.x;
-                    // prefab.GetComponent<HexagonBlock>().y = hexagonalPostion.y;
-                    prefab.GetComponent<GuideGrid>().text.text = "";
+                    if (prefab.tag == "Obstacle")
+                    {
+                        prefab.GetComponent<ObstacleItems>().xPos = hexagonalPostion.x;
+                        prefab.GetComponent<ObstacleItems>().yPos = hexagonalPostion.y;
+                    }
+                    else if (prefab.tag == "Bomb")
+                    {
+                        prefab.GetComponent<BombItems>().xPos = hexagonalPostion.x;
+                        prefab.GetComponent<BombItems>().yPos = hexagonalPostion.y;
+                    }
+                    else if (prefab.tag == "Rocket")
+                    {
+                        prefab.GetComponent<RocketItems>().xPos = hexagonalPostion.x;
+                        prefab.GetComponent<RocketItems>().yPos = hexagonalPostion.y;
+                    }
+                    else if (prefab.tag == "HexagonBlock")
+                    {
+                        prefab.GetComponent<HexagonBlock>().x = hexagonalPostion.x;
+                        prefab.GetComponent<HexagonBlock>().y = hexagonalPostion.y;
+                    }
                     GridData.Instance.gridContainers.Add(new GridContainer(hexagonalPostion.x, hexagonalPostion.y, prefab));
                     prefab.name = "Behind: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
                     prefab.transform.SetParent(GameObject.FindWithTag("BehidGridPool").transform);
@@ -294,31 +331,33 @@ public class GridGenerator : MonoBehaviour
     #endregion
 
 
-    public void SpawnBomb(int x, int y)
-    {
-        isBombing = true;
-        Vector3Int cellPos = new Vector3Int(x, y, 0);
-        Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
-        GameObject bomb = Instantiate(bombItem, cellCenterPos, Quaternion.Euler(0,0,90));
-        int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
-        GridData.Instance.gridContainers[gridIndex].gameObject = bomb;
-        bomb.GetComponent<BombItems>().xPos = x;
-        bomb.GetComponent<BombItems>().yPos = y;
-    }
-
-    public void SpawnRocket(int x, int y)
-    {
-        Vector3Int cellPos = new Vector3Int(x, y, 0);
-        Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
-        GameObject rocket = Instantiate(rocketItem, cellCenterPos, Quaternion.Euler(0,0,90));
-        int index = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
-        if (index != -1)
+    #region Spawn Items
+        public void SpawnBomb(int x, int y)
         {
-            GridData.Instance.gridContainers[index].gameObject = gameObject;
-            rocket.GetComponent<RocketItems>().xPos = x;
-            rocket.GetComponent<RocketItems>().yPos = y;
+            isBombing = true;
+            Vector3Int cellPos = new Vector3Int(x, y, 0);
+            Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
+            GameObject bomb = Instantiate(bombItem, cellCenterPos, Quaternion.Euler(0,0,90));
+            int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
+            GridData.Instance.gridContainers[gridIndex].gameObject = bomb;
+            bomb.GetComponent<BombItems>().xPos = x;
+            bomb.GetComponent<BombItems>().yPos = y;
         }
-    }
+    
+        public void SpawnRocket(int x, int y)
+        {
+            Vector3Int cellPos = new Vector3Int(x, y, 0);
+            Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
+            GameObject rocket = Instantiate(rocketItem, cellCenterPos, Quaternion.Euler(0,0,90));
+            int index = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
+            if (index != -1)
+            {
+                GridData.Instance.gridContainers[index].gameObject = gameObject;
+                rocket.GetComponent<RocketItems>().xPos = x;
+                rocket.GetComponent<RocketItems>().yPos = y;
+            }
+        }
+    #endregion
     
     
 

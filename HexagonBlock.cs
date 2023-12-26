@@ -123,6 +123,14 @@ public class HexagonBlock : MonoBehaviour
 
     public void DestroyHexagonBlock()
     {
+        //Check is obstacle below
+        int obstacleIndex = GridData.Instance.gridContainers.FindIndex(element => element != null && element.x == x && element.y == y - 1 && element.gameObject.tag == "Obstacle");
+        if (obstacleIndex != -1)
+        {
+            GridData.Instance.gridContainers[obstacleIndex].gameObject.GetComponent<Box>().DestroyObstacle();
+        }
+
+
         //Destroy the gameobject
         isDestroying = true;
         //Remove the gameobject from list
