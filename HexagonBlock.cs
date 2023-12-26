@@ -12,8 +12,10 @@ public enum HexagonType
     Purple,
     Orange,
     White,
-
+    Obstacle,
     Bomb,
+    Rocket,
+
     Empty
 }
 
@@ -90,7 +92,7 @@ public class HexagonBlock : MonoBehaviour
             int previousIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
             GridData.Instance.gridContainers[previousIndex].gameObject = GridGenerator.Instance.guideGrid;
             y -= 1;
-            
+            visited.Clear();
             
         }
         
@@ -122,7 +124,7 @@ public class HexagonBlock : MonoBehaviour
     public void DestroyHexagonBlock()
     {
         //Destroy the gameobject
-        
+        isDestroying = true;
         //Remove the gameobject from list
         int index = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
         LeanTween.scale(this.gameObject, new Vector3(2, 2, 0), 0.8f).setEase(LeanTweenType.easeInBack).setOnComplete(() => 
@@ -130,6 +132,7 @@ public class HexagonBlock : MonoBehaviour
             GridGenerator.Instance.AddScore(hexagonType);
             
             GridData.Instance.gridContainers[index].gameObject = GridGenerator.Instance.guideGrid;
+            isDestroying = false;
             Destroy(this.gameObject);
             
         });
@@ -137,7 +140,7 @@ public class HexagonBlock : MonoBehaviour
         
     }
 
-   
+    HashSet<HexagonBlock> visited = new HashSet<HexagonBlock>();
     public void CheckAdjacentSameType(HexagonBlock startBlock)
     {   
         
@@ -148,15 +151,28 @@ public class HexagonBlock : MonoBehaviour
 
 
         // Define the offsets for the neighbors
-        int[][] offsets = new int[][] { new int[] {-1, 0}, new int[] {0, -1}, new int[] {1, -1}, new int[] {1, 0}, new int[] {0, 1}, new int[] {-1, 1} };
+        int[][] offsets = new int[][]
+        {
+            
+            new int[] {-1, 0},
+            new int[] {0, -1},
+            new int[] {1, -1},
+            new int[] {1, 0},
+            new int[] {0, 1},
+            new int[] {-1, 1}};
 
         // Create a queue for BFS and add the start block to it
         Queue<HexagonBlock> queue = new Queue<HexagonBlock>();
         queue.Enqueue(startBlock);
 
         // Create a set to keep track of visited blocks
-        HashSet<HexagonBlock> visited = new HashSet<HexagonBlock>();
+        
         visited.Add(startBlock);
+
+        int xLimitLow = GridData.Instance.xLimitLow;
+        int xLimitHigh = GridData.Instance.xLimitHigh;
+        int yLimitLow = GridData.Instance.yLimitLow;
+        int yLimitHigh = GridData.Instance.yLimitHigh;
 
         while (queue.Count > 0)
         {
@@ -167,9 +183,13 @@ public class HexagonBlock : MonoBehaviour
             {
                 int neighborX = currentBlock.x + offset[0];
                 int neighborY = currentBlock.y + offset[1];
-
+                
+                if (neighborX < xLimitLow || neighborX > xLimitHigh || neighborY < yLimitLow || neighborY > yLimitHigh)
+                {
+                    continue;
+                }
                 // Check if the neighbor is within the grid
-                if (GridData.Instance.gridContainers.Exists(element => element.x == neighborX && element.y == neighborY))
+                if (GridData.Instance.gridContainers.Exists(element => element.x == neighborX && element.y == neighborY) )
                 {
                     // Check if the neighbor is of the same type
                     int neighborIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == neighborX && element.y == neighborY);
@@ -183,21 +203,20 @@ public class HexagonBlock : MonoBehaviour
                             continue;
                         }
                         sameTypeNeighbors.Add(neighborBlock);
-                        sameTypeNeighbors.Add(currentBlock);
-                        
-                        
                     }
                     
                 }
                 
             }
+            sameTypeNeighbors.Add(currentBlock);
 
             // If there are more than 3 neighbors of the same type, destroy them
             if (sameTypeNeighbors.Count >= 2)
             {
                 if (sameTypeNeighbors.Count >= 4)
                 {
-                    
+                    GridGenerator.Instance.SpawnRocket(currentBlock.x, currentBlock.y);
+                    Log("Spawn a bomb");
                     // Spawn a bomb
                     foreach (HexagonBlock neighborBlock in sameTypeNeighbors)
                     {
@@ -208,8 +227,7 @@ public class HexagonBlock : MonoBehaviour
                         neighborBlock.DestroyHexagonBlock();
                     }
 
-                    GridGenerator.Instance.SpawnBomb(currentBlock.x, currentBlock.y);
-                    Log("Spawn a bomb");
+                    
                     
                 }
 
