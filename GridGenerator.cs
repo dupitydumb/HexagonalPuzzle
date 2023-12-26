@@ -7,16 +7,17 @@ public class GridGenerator : MonoBehaviour
 {
 
     public LevelGameData levels;
-    
     public Grid grid;
-
     public GameObject guideGrid;
     
-    [Header("Hexagon Blocks that will be spawned to the grid"), Tooltip("Hexagon Blocks that will be spawned to the grid")
-    ]
+    [Header("Hexagon Blocks that will be spawned to the grid"), Tooltip("Hexagon Blocks that will be spawned to the grid")]
     public GameObject[] hexagonBlocks;
     public GameObject bombItem;
     public GameObject rocketItem;
+    public GameObject discoItem;
+
+
+
     [HideInInspector]
     public bool isBombing = false;
 
@@ -353,12 +354,24 @@ public class GridGenerator : MonoBehaviour
             Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
             GameObject rocket = Instantiate(rocketItem, cellCenterPos, Quaternion.Euler(0,0,90));
             int index = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
-            if (index != -1)
-            {
-                GridData.Instance.gridContainers[index].gameObject = gameObject;
-                rocket.GetComponent<RocketItems>().xPos = x;
-                rocket.GetComponent<RocketItems>().yPos = y;
-            }
+            
+            GridData.Instance.gridContainers[index].gameObject = gameObject;
+            rocket.GetComponent<RocketItems>().xPos = x;
+            rocket.GetComponent<RocketItems>().yPos = y;
+            
+        }
+
+        public void SpawnDisco(int x, int y, HexagonType hexagonType)
+        {
+            Vector3Int cellPos = new Vector3Int(x, y, 0);
+            Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
+            GameObject disco = Instantiate(discoItem, cellCenterPos, Quaternion.Euler(0,0,90));
+            int index = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
+            GridData.Instance.gridContainers[index].gameObject = gameObject;
+            disco.GetComponent<DiscoItems>().xPos = x;
+            disco.GetComponent<DiscoItems>().yPos = y;
+            disco.GetComponent<DiscoItems>().hexagonType = hexagonType;
+            
         }
     #endregion
     

@@ -2,24 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RocketItems : MonoBehaviour
+public class RocketItems : BoosterItems
 {
-    private int xLimitLow;
-    private int xLimitHigh;
-    private int yLimitLow;
-    private int yLimitHigh;
-
-    public int xPos;
-    public int yPos;
     // Start is called before the first frame update
     void Start()
     {
-        xLimitHigh = GridData.Instance.xLimitHigh;
-        xLimitLow = GridData.Instance.xLimitLow;
-        yLimitHigh = GridData.Instance.yLimitHigh;
-        yLimitLow = GridData.Instance.yLimitLow;
-
+        base.GetLimits();
         Invoke("CheckNeighbours", 3f);
+        
+
+       
     }
 
     // Update is called once per frame

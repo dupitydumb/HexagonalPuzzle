@@ -114,6 +114,7 @@ public class HexagonBlock : MonoBehaviour
                     GridData.Instance.gridContainers[neighborIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
                     
                 }
+                GridGenerator.Instance.SpawnDisco(x, y, hexagonType);
                 matchNeighbors.Clear();
                 visited.Clear();
             }

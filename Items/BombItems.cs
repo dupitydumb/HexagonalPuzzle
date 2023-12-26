@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BombItems : MonoBehaviour
+public class BombItems : BoosterItems
 {
 
     GridData gridData;
 
 
-    public int xPos;   
-    public int yPos;
+
     // Start is called before the first frame update
     void Start()
     {
+        base.GetLimits();
         gridData = GridData.Instance;
         Invoke("GetNeighbor", 3f);
     }
@@ -41,10 +41,7 @@ public class BombItems : MonoBehaviour
             new Vector2(-1, 0)
         };
 
-        int xLimitLow = GridData.Instance.xLimitLow;
-        int xLimitHigh = GridData.Instance.xLimitHigh;
-        int yLimitLow = GridData.Instance.yLimitLow;
-        int yLimitHigh = GridData.Instance.yLimitHigh;
+        
 
         Vector2[] neighborPos = new Vector2[5];
         for (int i = 0; i < 5; i++)
