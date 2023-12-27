@@ -424,6 +424,7 @@ public class GridGenerator : MonoBehaviour
                     hexagonBlock.transform.position = topGridCellPos[i];
                     hexagonBlock.GetComponent<HexagonBlock>().x = topGridContainers[i].x;
                     hexagonBlock.GetComponent<HexagonBlock>().y = topGridContainers[i].y;
+                    hexagonBlock.GetComponent<HexagonBlock>().CheckMatch(hexagonBlock.GetComponent<HexagonBlock>());
                     hexagonBlock.name = "Hex" + topGridContainers[i].x + "," + topGridContainers[i].y;
                     topGridContainers[i].gameObject = hexagonBlock;
                     hexagonBlock.transform.SetParent(GameObject.FindWithTag("HexagonBlockPool").transform);

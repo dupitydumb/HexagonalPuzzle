@@ -45,9 +45,11 @@ public class HexagonBlock : MonoBehaviour
     void Start()
     {
         grid = GameObject.FindWithTag("Grid").GetComponent<Grid>();
-        
         //add event listener
         GridGenerator.Instance.onGridChanges.AddListener(OnChange);
+        GridGenerator.Instance.onGridChanges.AddListener(() => CheckMatch(this));
+        CheckMatch(this);
+        
     }
 
     // Update is called once per frame
@@ -58,11 +60,13 @@ public class HexagonBlock : MonoBehaviour
         {
             MoveDown();
         }
-
-
-        CheckMatch(this);
-        
-        
+        else
+        {
+            if (isMoving == false && isDestroying == false)
+            {
+                CheckMatch(this);
+            }
+        }
 
     }
 
@@ -168,6 +172,7 @@ public class HexagonBlock : MonoBehaviour
             
             
         }
+        CheckMatch(this);
         
     }
 
@@ -196,6 +201,7 @@ public class HexagonBlock : MonoBehaviour
 
     public void DestroyHexagonBlock()
     {
+        
         //Check is obstacle below
         int obstacleIndex = GridData.Instance.gridContainers.FindIndex(element => element != null && element.x == x && element.y == y - 1 && element.gameObject.tag == "BoxItems");
         if (obstacleIndex != -1)
@@ -213,6 +219,7 @@ public class HexagonBlock : MonoBehaviour
             GridGenerator.Instance.AddScore(hexagonType);
             GridData.Instance.gridContainers[index].gameObject = GridGenerator.Instance.guideGrid;
             isDestroying = false;
+            GridGenerator.Instance.onGridChanges.Invoke();
             Destroy(this.gameObject);
             
         });
@@ -222,24 +229,39 @@ public class HexagonBlock : MonoBehaviour
 
     HashSet<HexagonBlock> visited = new HashSet<HexagonBlock>();
     public List<Vector2> matchNeighbors;
+
     public void CheckMatch(HexagonBlock currentblock)
     {   
-        Vector2[] offsets = new Vector2[]
+        
+        Vector2[] offsetsEven = new Vector2[]
         {
             new Vector2(-1, 0),
+            new Vector2(-1,-1),
             new Vector2(0, -1),
-            new Vector2(1, -1),
             new Vector2(1, 0),
             new Vector2(0, 1),
             new Vector2(-1, 1)
         };
 
+        Vector2[] offsetsOdd = new Vector2[]
+        {
+            new Vector2(-1, 0),
+            new Vector2(0, -1),
+            new Vector2(1, -1),
+            new Vector2(1, 0),
+            new Vector2(1, 1),
+            new Vector2(0, 1)
+        };
+
+        Vector2[] offsets = (currentblock.y % 2 == 0) ? offsetsEven : offsetsOdd;
+
+        
         foreach (Vector2 offset in offsets)
         {
             int neighborX = currentblock.x + (int)offset.x;
             int neighborY = currentblock.y + (int)offset.y;
-
-            if (GridData.Instance.gridContainers.Exists(element => element.x == neighborX && element.y == neighborY))
+            
+            if (GridData.Instance.gridContainers.Exists(element => element.x == neighborX && element.y == neighborY ))
             {
                 int neighborIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == neighborX && element.y == neighborY);
                 HexagonBlock neighborBlock = GridData.Instance.gridContainers[neighborIndex].gameObject.GetComponent<HexagonBlock>();
@@ -249,10 +271,11 @@ public class HexagonBlock : MonoBehaviour
                     {
                         continue;
                     }
-                    
                     matchNeighbors.Add(new Vector2(neighborBlock.x, neighborBlock.y));
-                    CheckMatch(neighborBlock);
                     visited.Add(neighborBlock);
+                    CheckMatch(neighborBlock);
+                    
+                    
                 }
             }
         }
@@ -262,79 +285,5 @@ public class HexagonBlock : MonoBehaviour
         Debug.Log(message);
         return message;
     }
-
-    // Destroy the current block
-    // Destroy(currentBlock.gameObject);
-    // int index = GridData.Instance.gridContainers.FindIndex(element => element.x == currentBlock.x && element.y == currentBlock.y);
-    // GridData.Instance.gridContainers[index].gameObject = GridGenerator.Instance.guideGrid;
-
-    // // Destroy the neighbor block
-    // Destroy(neighborBlock.gameObject);
-
-    // // Remove the neighbor block from the grid
-    // GridData.Instance.gridContainers[neighborIndex].gameObject = GridGenerator.Instance.guideGrid;
-
-    // HashSet<GridContainer> visited = new HashSet<GridContainer>();
-    // public bool CheckAdjacentSameType()
-    // {
-    //     // Define the offsets for the neighbors
-    //     int[][] offsets = new int[][] { new int[] {-1, 0}, new int[] {0, -1}, new int[] {1, -1}, new int[] {1, 0}, new int[] {0, 1}, new int[] {-1, 1} };
-
-    //     // Iterate over the neighbors
-    //     foreach (int[] offset in offsets)
-    //     {
-    //         int neighborX = x + offset[0];
-    //         int neighborY = y + offset[1];
-
-    //         // Check if the neighbor is within the grid
-    //         if (GridData.Instance.gridContainers.Exists(element => element.x == neighborX && element.y == neighborY))
-    //         {
-    //             // Check if the neighbor is of the same type
-    //             int neighborIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == neighborX && element.y == neighborY);
-    //             if (GridData.Instance.gridContainers[neighborIndex] != null && GridData.Instance.gridContainers[neighborIndex].gameObject.GetComponent<HexagonBlock>().hexagonType == hexagonType)
-    //             {
-    //                 if (visited.Contains(GridData.Instance.gridContainers[neighborIndex]))
-    //                 {
-    //                     continue;
-    //                 }
-
-    //                 visited.Add(GridData.Instance.gridContainers[neighborIndex]);
-    //                 // Check the nieghbor
-    //                 GameObject hexagonBlock = GridData.Instance.gridContainers[neighborIndex].gameObject;
-    //                 hexagonBlock.GetComponent<HexagonBlock>().DestroyHexagonBlock();
-                    
-    //                 //Also destroy the neighbor
-                    
-    //                 return true;
-
-    //             }
-    //             else
-    //             {
-    //                 Debug.Log("No same type");
-    //             }
-                
-    //         }
-    //     }
-
-    //     // No neighbors of the same type were found
-    //     return false;
-    // }
-
-    
-
-
-    //Check if neighbor x and y is the same gameobject if same destroy all like tetris
-    
-    //TODO: Check if the block is same type
-    
-    
-
-
-
-    
-
-    
-
-    
     
 }
