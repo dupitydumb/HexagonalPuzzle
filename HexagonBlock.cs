@@ -47,8 +47,7 @@ public class HexagonBlock : MonoBehaviour
         grid = GameObject.FindWithTag("Grid").GetComponent<Grid>();
         //add event listener
         GridGenerator.Instance.onGridChanges.AddListener(OnChange);
-        GridGenerator.Instance.onGridChanges.AddListener(() => CheckMatch(this));
-        Invoke("AfterSpawn", 0.4f);
+        Invoke("AfterSpawn", 0.2f);
         
     }
 
@@ -163,6 +162,7 @@ public class HexagonBlock : MonoBehaviour
         Log("On Change");
         matchNeighbors.Clear();
         visited.Clear();
+        CheckMatch(this);
     }
 
 
