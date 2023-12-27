@@ -48,8 +48,13 @@ public class HexagonBlock : MonoBehaviour
         //add event listener
         GridGenerator.Instance.onGridChanges.AddListener(OnChange);
         GridGenerator.Instance.onGridChanges.AddListener(() => CheckMatch(this));
-        CheckMatch(this);
+        Invoke("AfterSpawn", 0.4f);
         
+    }
+
+    void AfterSpawn()
+    {
+        CheckMatch(this);
     }
 
     // Update is called once per frame
@@ -76,52 +81,62 @@ public class HexagonBlock : MonoBehaviour
     /// </summary>
     void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0) && !isMoving && !isDestroying && !GridGenerator.Instance.isBombing && !GridGenerator.Instance.isItemsActive)
+        if (Input.GetMouseButtonDown(0) && !isMoving && !isDestroying && !GridGenerator.Instance.isBombing)
         {
 
             if (matchNeighbors.Count >= 11 && matchNeighbors != null)
             {
+                GridGenerator.Instance.SpawnDisco(x, y, hexagonType);
                 GridGenerator.Instance.isBombing = true;
                 foreach (Vector2 neighbor in matchNeighbors)
                 {
                     int neighborIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == (int)neighbor.x && element.y == (int)neighbor.y);
-                    GridData.Instance.gridContainers[neighborIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
+                    if (GridData.Instance.gridContainers[neighborIndex].gameObject.tag == "HexagonBlock")
+                    {
+                        GridData.Instance.gridContainers[neighborIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
+                    }
                     
                 }
                 
-                GridGenerator.Instance.SpawnDisco(x, y, hexagonType);
                 matchNeighbors.Clear();
                 visited.Clear();
                 GridGenerator.Instance.isBombing = false;
+                Destroy(this.gameObject);
             }
 
             if (matchNeighbors.Count >= 9 && matchNeighbors != null)
             {
-                GridGenerator.Instance.isBombing = true;
-                
+                GridGenerator.Instance.SpawnBomb(x, y);
                 foreach (Vector2 neighbor in matchNeighbors)
                 {
                     int neighborIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == (int)neighbor.x && element.y == (int)neighbor.y);
-                    GridData.Instance.gridContainers[neighborIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
+                    if (GridData.Instance.gridContainers[neighborIndex].gameObject.tag == "HexagonBlock")
+                    {
+                        GridData.Instance.gridContainers[neighborIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
+                    }
                     
                 }
-                GridGenerator.Instance.SpawnBomb(x, y);
+                
                 matchNeighbors.Clear();
                 visited.Clear();
-                GridGenerator.Instance.isBombing = false;
+                Destroy(this.gameObject);
             }
 
             if (matchNeighbors.Count >= 6 && matchNeighbors != null)
             {
+                GridGenerator.Instance.SpawnRocket(x, y);
                 foreach (Vector2 neighbor in matchNeighbors)
                 {
                     int neighborIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == (int)neighbor.x && element.y == (int)neighbor.y);
-                    GridData.Instance.gridContainers[neighborIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
+                    if (GridData.Instance.gridContainers[neighborIndex].gameObject.tag == "HexagonBlock")
+                    {
+                        GridData.Instance.gridContainers[neighborIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
+                    }
                     
                 }
-                GridGenerator.Instance.SpawnRocket(x, y);
                 matchNeighbors.Clear();
                 visited.Clear();
+                Destroy(this.gameObject);
             }
 
             if (matchNeighbors.Count >= 2 && matchNeighbors != null)
@@ -129,7 +144,10 @@ public class HexagonBlock : MonoBehaviour
                 foreach (Vector2 neighbor in matchNeighbors)
                 {
                     int neighborIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == (int)neighbor.x && element.y == (int)neighbor.y);
-                    GridData.Instance.gridContainers[neighborIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
+                    if (GridData.Instance.gridContainers[neighborIndex].gameObject.tag == "HexagonBlock")
+                    {
+                        GridData.Instance.gridContainers[neighborIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
+                    }
                     
                 }
                 matchNeighbors.Clear();
@@ -189,7 +207,7 @@ public class HexagonBlock : MonoBehaviour
             {
                 return false;
             }
-            if (GridData.Instance.gridContainers.Exists(element => element.x == x && element.y == y - 1 && element.gameObject.tag == "GuideGrid"))
+            if (GridData.Instance.gridContainers.Exists(element => element.x == x && element.y == y - 1 && element.gameObject.tag == "GuideGrid" && element.gameObject.tag != "HexagonBlock"))
             {
                 return true;
             }

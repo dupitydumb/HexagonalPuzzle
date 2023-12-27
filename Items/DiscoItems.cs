@@ -12,12 +12,27 @@ public class DiscoItems : BoosterItems
     void Start()
     {
         GridGenerator.Instance.isItemsActive = true;
-        Invoke("GetHexagonType", 5f);
     }
 
     // Update is called once per frame
     void Update()
     {
+        
+    }
+
+    private void OnMouseOver() {
+        if(Input.GetMouseButtonDown(0))
+        {
+            ActivateDisco();
+        }
+    }
+
+    void ActivateDisco()
+    {
+        GetHexagonType();
+        //LeanTween Animation scale
+        
+        //Get all neighbours and destroy them
         
     }
 

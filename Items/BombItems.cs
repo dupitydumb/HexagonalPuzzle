@@ -14,7 +14,7 @@ public class BombItems : BoosterItems
     {
         base.GetLimits();
         gridData = GridData.Instance;
-        Invoke("GetNeighbor", 3f);
+        
     }
 
     // Update is called once per frame
@@ -23,10 +23,24 @@ public class BombItems : BoosterItems
         
     }
 
-
-    void Explode()
+    /// <summary>
+    /// Called every frame while the mouse is over the GUIElement or Collider.
+    /// </summary>
+    void OnMouseOver()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            ActivateBomb();
+        }
+    }
 
+
+    void ActivateBomb()
+    {
+        
+        GetNeighbor();
+
+        
     }
 
     void GetNeighbor()

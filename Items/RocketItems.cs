@@ -9,7 +9,7 @@ public class RocketItems : BoosterItems
     {
         GridGenerator.Instance.isItemsActive = true;
         base.GetLimits();
-        Invoke("CheckNeighbours", 3f);
+        
         
 
        
@@ -18,6 +18,34 @@ public class RocketItems : BoosterItems
     // Update is called once per frame
     void Update()
     {
+        
+    }
+
+    void OnMouseOver()
+    {
+        Debug.Log("Mouse Over");
+        if(Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Mouse Clicked");
+            ActivateRocket();
+        }
+    }
+
+    void ActivateRocket()
+    {
+        CheckNeighbours();
+        //LeanTween Animation move horizontally
+        LeanTween.moveX(gameObject, 0, 0.5f).setOnComplete(() => {
+            //LeanTween Animation move vertically
+            LeanTween.moveY(gameObject, 0, 0.5f).setOnComplete(() => {
+                //LeanTween Animation scale
+                LeanTween.scale(gameObject, new Vector3(3, 3, 0), 0.5f).setOnComplete(() => {
+                    //Destroy the rocket
+                    Destroy(gameObject);
+                });
+            });
+        });
+        //Get all neighbours and destroy them
         
     }
 

@@ -38,7 +38,7 @@ public class BoosterItems : MonoBehaviour
         yLimitLow = GridData.Instance.yLimitLow;
         yLimitHigh = GridData.Instance.yLimitHigh;
     }
-
+    
 
     // Update is called once per frame
     void Update()

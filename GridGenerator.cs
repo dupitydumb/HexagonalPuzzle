@@ -22,6 +22,7 @@ public class GridGenerator : MonoBehaviour
     [HideInInspector]
     public bool isBombing = false;
     public bool isItemsActive = false;
+    public bool isSpawning = false;
 
     [Space(30)]
     [Header("Top Grid Where Hexagon Blocks will be spawned")]
@@ -373,6 +374,7 @@ public class GridGenerator : MonoBehaviour
     #region Spawn Items
         public void SpawnBomb(int x, int y)
         {
+            isSpawning = true;
             isBombing = true;
             Vector3Int cellPos = new Vector3Int(x, y, 0);
             Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
@@ -385,11 +387,11 @@ public class GridGenerator : MonoBehaviour
     
         public void SpawnRocket(int x, int y)
         {
+            isSpawning = true;
             Vector3Int cellPos = new Vector3Int(x, y, 0);
             Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
             GameObject rocket = Instantiate(rocketItem, cellCenterPos, Quaternion.Euler(0,0,90));
             int index = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
-            
             GridData.Instance.gridContainers[index].gameObject = gameObject;
             rocket.GetComponent<RocketItems>().xPos = x;
             rocket.GetComponent<RocketItems>().yPos = y;
@@ -398,6 +400,7 @@ public class GridGenerator : MonoBehaviour
 
         public void SpawnDisco(int x, int y, HexagonType hexagonType)
         {
+            isSpawning = true;
             Vector3Int cellPos = new Vector3Int(x, y, 0);
             Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
             GameObject disco = Instantiate(discoItem, cellCenterPos, Quaternion.Euler(0,0,90));
@@ -406,6 +409,7 @@ public class GridGenerator : MonoBehaviour
             disco.GetComponent<DiscoItems>().xPos = x;
             disco.GetComponent<DiscoItems>().yPos = y;
             disco.GetComponent<DiscoItems>().hexagonType = hexagonType;
+
             
         }
     #endregion
