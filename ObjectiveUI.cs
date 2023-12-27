@@ -12,11 +12,14 @@ public class ObjectiveUI : MonoBehaviour
 
     private List<GameObject> objectiveUI = new List<GameObject>();
 
+    public TMP_Text levelNumberText;
+
     // Start is called before the first frame update
     void Start()
     {
         GetLevelData();
         SetObjectiveUI();
+        levelNumberText.text = levels.levelNumber.ToString();
     }
 
     // Update is called once per frame

@@ -7,6 +7,7 @@ public class RocketItems : BoosterItems
     // Start is called before the first frame update
     void Start()
     {
+        GridGenerator.Instance.isItemsActive = true;
         base.GetLimits();
         Invoke("CheckNeighbours", 3f);
         
@@ -73,7 +74,7 @@ public class RocketItems : BoosterItems
 
     void DestroyRocket()
     {
-        GridGenerator.Instance.isBombing = true;
+        GridGenerator.Instance.isItemsActive = true;
         //LeanTween Animation move horizontally
         LeanTween.moveX(gameObject, 0, 0.5f).setOnComplete(() => {
             //LeanTween Animation move vertically
@@ -89,7 +90,7 @@ public class RocketItems : BoosterItems
 
         int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == xPos && element.y == yPos);
         GridData.Instance.gridContainers[gridIndex].gameObject = GridGenerator.Instance.guideGrid;
-        GridGenerator.Instance.isBombing = false;
+        GridGenerator.Instance.isItemsActive = false;
         Destroy(gameObject);
     }
 }

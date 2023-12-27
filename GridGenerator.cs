@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GridGenerator : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class GridGenerator : MonoBehaviour
 
     [HideInInspector]
     public bool isBombing = false;
+    public bool isItemsActive = false;
 
     [Space(30)]
     [Header("Top Grid Where Hexagon Blocks will be spawned")]
@@ -180,13 +182,13 @@ public class GridGenerator : MonoBehaviour
                     {
                         prefab.GetComponent<ObstacleItems>().xPos = hexagonalPostion.x;
                         prefab.GetComponent<ObstacleItems>().yPos = hexagonalPostion.y;
-                        gameObject.name = "Box: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
+                        prefab.gameObject.name = "Box: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
                     }
                     else if (prefab.tag == "Bomb")
                     {
                         prefab.GetComponent<BombItems>().xPos = hexagonalPostion.x;
                         prefab.GetComponent<BombItems>().yPos = hexagonalPostion.y;
-                        gameObject.name = "Bomb: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
+                        prefab.gameObject.name = "Bomb: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
                     }
                     else if (prefab.tag == "Rocket")
                     {
@@ -244,7 +246,9 @@ public class GridGenerator : MonoBehaviour
             }
     
         //Check Score if it meets the objective
-        
+
+
+
         public void CheckScore()
         {
             //Get the current level
@@ -338,13 +342,30 @@ public class GridGenerator : MonoBehaviour
     
             //Level Complete
             LevelComplete();
-            Debug.Log("Level Complete All");
+            
         }    
     
         public void LevelComplete()
         {
-            Time.timeScale = 0f;
+            
             CompletePanel.SetActive(true);
+        }
+
+        public void NextLevel()
+        {
+
+            Debug.Log("Next Level");
+            int currentLevel = levels.levelNumber;
+            levels.levelNumber++;
+            if (currentLevel >= levels.unlockedLevel)
+            {
+                levels.unlockedLevel = levels.levelNumber;
+            }
+            //Reload the scene
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            
+            
+                
         }
     #endregion
 

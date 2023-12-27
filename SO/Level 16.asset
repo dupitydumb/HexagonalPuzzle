@@ -12,15 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0960cc9e264a544d8fdd236122c4443, type: 3}
   m_Name: Level 16
   m_EditorClassIdentifier: 
-  levelNumber: 2
+  levelNumber: 16
   levelObjectives:
   - hexagonType: 1
-    count: 10
+    count: 25
     isCompleted: 0
-  - hexagonType: 0
-    count: 5
+  - hexagonType: 3
+    count: 25
     isCompleted: 0
-  - hexagonType: 6
+  - hexagonType: 4
+    count: 25
+    isCompleted: 0
+  - hexagonType: 2
     count: 25
     isCompleted: 0
   levels:
@@ -106,7 +109,7 @@ MonoBehaviour:
     - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
       x: 4
       y: 8
-    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
       x: -1
       y: 7
     - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
@@ -121,7 +124,7 @@ MonoBehaviour:
     - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
       x: 3
       y: 7
-    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
       x: 4
       y: 7
     - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
@@ -160,33 +163,33 @@ MonoBehaviour:
     - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
       x: 0
       y: 4
-    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 2ef8da1d789b7744e878083af07688e5, type: 3}
       x: 1
       y: 4
-    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 2ef8da1d789b7744e878083af07688e5, type: 3}
       x: 2
       y: 4
-    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 2ef8da1d789b7744e878083af07688e5, type: 3}
       x: 3
       y: 4
     - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
       x: 4
       y: 4
-    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
       x: -1
       y: 3
-    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
       x: 0
       y: 3
-    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
       x: 1
       y: 3
-    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
       x: 2
       y: 3
-    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
       x: 3
       y: 3
-    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
       x: 4
       y: 3
