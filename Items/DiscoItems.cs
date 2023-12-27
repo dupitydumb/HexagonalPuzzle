@@ -34,6 +34,7 @@ public class DiscoItems : BoosterItems
 
     void DestroyDisco()
     {
+        GridGenerator.Instance.isBombing = true;
         foreach (int index in toDestroyIndex)
         {
             GridData.Instance.gridContainers[index].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
@@ -43,6 +44,7 @@ public class DiscoItems : BoosterItems
             int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == xPos && element.y == yPos);
             GridData.Instance.gridContainers[gridIndex].gameObject = GridGenerator.Instance.guideGrid;
             GridGenerator.Instance.isBombing = false;
+            
             Destroy(gameObject);
         });
     }

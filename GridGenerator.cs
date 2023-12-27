@@ -40,6 +40,7 @@ public class GridGenerator : MonoBehaviour
     public int PurpleHex;
     public int OrangeHex;
     public int WhiteHex;
+    public int ObstacleScore;
 
     public GameObject CompletePanel;
     
@@ -175,15 +176,17 @@ public class GridGenerator : MonoBehaviour
                     //Instantiate the prefab to the center of the grid cell
                     GameObject prefab = Instantiate(hexagonalPostion.hexagonPrefab, cellCenterPos, Quaternion.Euler(0,0,90));
                     prefab.transform.position = cellCenterPos;
-                    if (prefab.tag == "Obstacle")
+                    if (prefab.tag == "BoxItems")
                     {
                         prefab.GetComponent<ObstacleItems>().xPos = hexagonalPostion.x;
                         prefab.GetComponent<ObstacleItems>().yPos = hexagonalPostion.y;
+                        gameObject.name = "Box: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
                     }
                     else if (prefab.tag == "Bomb")
                     {
                         prefab.GetComponent<BombItems>().xPos = hexagonalPostion.x;
                         prefab.GetComponent<BombItems>().yPos = hexagonalPostion.y;
+                        gameObject.name = "Bomb: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
                     }
                     else if (prefab.tag == "Rocket")
                     {
@@ -232,6 +235,9 @@ public class GridGenerator : MonoBehaviour
                     case HexagonType.White:
                         WhiteHex++;
                         break;
+                    case HexagonType.Obstacle:
+                        ObstacleScore++;
+                        break;    
                     default:
                         break;
                 }
@@ -306,6 +312,14 @@ public class GridGenerator : MonoBehaviour
                             levelObjective.isCompleted = true;
                             
                         }
+                        break;
+                    case HexagonType.Obstacle:
+                        if (ObstacleScore >= levelObjective.count)
+                        {
+                            //Level Complete
+                            levelObjective.isCompleted = true;
+                            
+                        }    
                         break;
                     default:
                         break;

@@ -15,45 +15,103 @@ MonoBehaviour:
   levelNumber: 6
   levelObjectives:
   - hexagonType: 1
+    count: 15
+    isCompleted: 0
+  - hexagonType: 6
     count: 10
     isCompleted: 0
-  - hexagonType: 0
-    count: 5
+  - hexagonType: 2
+    count: 15
     isCompleted: 0
   levels:
-  - prefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
-    hexagonalPostions:
-    - x: 1
+  - hexagonalPostions:
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 1
       y: 10
-    - x: 2
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 2
       y: 10
-    - x: 3
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 3
       y: 10
-    - x: 0
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 0
       y: 9
-    - x: 1
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 1
       y: 9
-    - x: 2
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 2
       y: 9
-    - x: 3
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 3
       y: 9
-    - x: 0
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 0
       y: 8
-    - x: 1
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 1
       y: 8
-    - x: 2
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 2
       y: 8
-    - x: 3
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 3
       y: 8
-    - x: 4
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 4
       y: 8
-    - x: -1
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
+      x: -1
       y: 7
-    - x: 0
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
+      x: 0
       y: 7
-    - x: 1
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
+      x: 1
       y: 7
-    - x: 2
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
+      x: 2
       y: 7
-    - x: 3
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
+      x: 3
       y: 7
+    - hexagonPrefab: {fileID: 6241206391814468101, guid: 4f97226dd76290f4099b4a09e59c06b0, type: 3}
+      x: 4
+      y: 7
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 0
+      y: 6
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 1
+      y: 6
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 2
+      y: 6
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 3
+      y: 6
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 4
+      y: 6
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 0
+      y: 5
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 1
+      y: 5
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 2
+      y: 5
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 3
+      y: 5
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 1
+      y: 4
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 2
+      y: 4
+    - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}
+      x: 3
+      y: 4

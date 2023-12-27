@@ -73,6 +73,7 @@ public class RocketItems : BoosterItems
 
     void DestroyRocket()
     {
+        GridGenerator.Instance.isBombing = true;
         //LeanTween Animation move horizontally
         LeanTween.moveX(gameObject, 0, 0.5f).setOnComplete(() => {
             //LeanTween Animation move vertically

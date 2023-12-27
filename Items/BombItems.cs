@@ -54,11 +54,17 @@ public class BombItems : BoosterItems
 
         foreach (Vector2 pos in neighborPos)
         {
-            int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == pos.x && element.y == pos.y && element.gameObject.tag == "HexagonBlock");
-            if (gridIndex != -1)
+            int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == pos.x && element.y == pos.y);
+
+            if (gridData.gridContainers[gridIndex].gameObject.tag == "HexagonBlock")
             {
-                GridData.Instance.gridContainers[gridIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
+                gridData.gridContainers[gridIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
             }
+
+            if (gridData.gridContainers[gridIndex].gameObject.tag == "Box")
+            {
+                gridData.gridContainers[gridIndex].gameObject.GetComponent<Box>().DestroyObstacle();
+            }    
            
             
             
