@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RocketItems : BoosterItems
 {
+
+    private Animator anim;
     // Start is called before the first frame update
     void Start()
     {
@@ -11,7 +13,7 @@ public class RocketItems : BoosterItems
         base.GetLimits();
         
         
-
+        anim = GetComponent<Animator>();
        
     }
 
@@ -34,18 +36,7 @@ public class RocketItems : BoosterItems
     void ActivateRocket()
     {
         CheckNeighbours();
-        //LeanTween Animation move horizontally
-        LeanTween.moveX(gameObject, 0, 0.5f).setOnComplete(() => {
-            //LeanTween Animation move vertically
-            LeanTween.moveY(gameObject, 0, 0.5f).setOnComplete(() => {
-                //LeanTween Animation scale
-                LeanTween.scale(gameObject, new Vector3(3, 3, 0), 0.5f).setOnComplete(() => {
-                    //Destroy the rocket
-                    Destroy(gameObject);
-                });
-            });
-        });
-        //Get all neighbours and destroy them
+        
         
     }
 
@@ -96,26 +87,23 @@ public class RocketItems : BoosterItems
                 GridData.Instance.gridContainers[gridIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
             }
         }
-        DestroyRocket();
+        StartCoroutine(RocketAnimation());
 
+    }
+
+    IEnumerator RocketAnimation()
+    {
+        //when anim is done
+        anim.SetTrigger("Rocket");
+        Debug.Log(anim.GetCurrentAnimatorStateInfo(0).length);
+        yield return new WaitForSeconds(1f);
+        DestroyRocket();
+        
     }
 
     void DestroyRocket()
     {
         GridGenerator.Instance.isItemsActive = true;
-        //LeanTween Animation move horizontally
-        LeanTween.moveX(gameObject, 0, 0.5f).setOnComplete(() => {
-            //LeanTween Animation move vertically
-            LeanTween.moveY(gameObject, 0, 0.5f).setOnComplete(() => {
-                //LeanTween Animation scale
-                LeanTween.scale(gameObject, new Vector3(3, 3, 0), 0.5f).setOnComplete(() => {
-                    //Destroy the rocket
-                    Destroy(gameObject);
-                });
-            });
-        });
-
-
         int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == xPos && element.y == yPos);
         GridData.Instance.gridContainers[gridIndex].gameObject = GridGenerator.Instance.guideGrid;
         GridGenerator.Instance.isItemsActive = false;

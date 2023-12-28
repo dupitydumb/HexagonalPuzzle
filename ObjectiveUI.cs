@@ -51,31 +51,45 @@ public class ObjectiveUI : MonoBehaviour
                 case HexagonType.Red:
                     //load red hexagon sprite
                     img.sprite = Resources.Load<Sprite>("Sprites/PNG/Ball/Red_Ball");
+                    go.GetComponent<ObjectiveCount>().hexagonType = HexagonType.Red;
+                    go.GetComponent<ObjectiveCount>().objectiveCount = levelObjectives[i].count;
                     break;
                 case HexagonType.Blue:
                     Debug.Log("Blue");
                     //load blue hexagon sprite
                     img.sprite = Resources.Load<Sprite>("Sprites/PNG/Ball/Blue_Ball");
+                    go.GetComponent<ObjectiveCount>().hexagonType = HexagonType.Blue;
+                    go.GetComponent<ObjectiveCount>().objectiveCount = levelObjectives[i].count;
                     break;
                 case HexagonType.Green:
                     //load green hexagon sprite
                     img.sprite = Resources.Load<Sprite>("Sprites/PNG/Ball/Green_Ball");
+                    go.GetComponent<ObjectiveCount>().hexagonType = HexagonType.Green;
+                    go.GetComponent<ObjectiveCount>().objectiveCount = levelObjectives[i].count;
                     break;
                 case HexagonType.Yellow:
                     //load yellow hexagon sprite
                     img.sprite = Resources.Load<Sprite>("Sprites/PNG/Ball/Yellow_Ball");
+                    go.GetComponent<ObjectiveCount>().hexagonType = HexagonType.Yellow;
+                    go.GetComponent<ObjectiveCount>().objectiveCount = levelObjectives[i].count;
                     break;
                 case HexagonType.Purple:
                     //load purple hexagon sprite
                     img.sprite = Resources.Load<Sprite>("Sprites/PNG/Ball/Purple_Ball");
+                    go.GetComponent<ObjectiveCount>().hexagonType = HexagonType.Purple;
+                    go.GetComponent<ObjectiveCount>().objectiveCount = levelObjectives[i].count;
                     break;
                 case HexagonType.Orange:
                     //load orange hexagon sprite
                     img.sprite = Resources.Load<Sprite>("Sprites/PNG/Ball/Orange_Ball");
+                    go.GetComponent<ObjectiveCount>().hexagonType = HexagonType.Orange;
+                    go.GetComponent<ObjectiveCount>().objectiveCount = levelObjectives[i].count;
                     break;
                 case HexagonType.White:
                     //load white hexagon sprite
                     img.sprite = Resources.Load<Sprite>("Sprites/PNG/Ball/White_Ball");
+                    go.GetComponent<ObjectiveCount>().hexagonType = HexagonType.White;
+                    go.GetComponent<ObjectiveCount>().objectiveCount = levelObjectives[i].count;
                     break;        
 
 
@@ -90,6 +104,9 @@ public class ObjectiveUI : MonoBehaviour
     public void UpdateObjectiveUI()
     {
         //update objective UI text from GridGenerator
-        
+        foreach (GameObject go in objectiveUI)
+        {
+            
+        }
     }
 }

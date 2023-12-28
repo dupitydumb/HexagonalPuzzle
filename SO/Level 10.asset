@@ -15,11 +15,11 @@ MonoBehaviour:
   levelNumber: 10
   levelObjectives:
   - hexagonType: 2
-    count: 2000
+    count: 25
     isCompleted: 0
   - hexagonType: 3
     count: 20
-    isCompleted: 1
+    isCompleted: 0
   - hexagonType: 4
     count: 20
     isCompleted: 0
