@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0960cc9e264a544d8fdd236122c4443, type: 3}
   m_Name: Level 11
   m_EditorClassIdentifier: 
-  levelNumber: 12
+  levelNumber: 11
   levelObjectives:
   - hexagonType: 0
     count: 20

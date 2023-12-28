@@ -351,7 +351,8 @@ public class GridGenerator : MonoBehaviour
             
             CompletePanel.SetActive(true);
         }
-
+    #endregion
+    #region Navigation
         public void NextLevel()
         {
 
@@ -368,7 +369,13 @@ public class GridGenerator : MonoBehaviour
             
                 
         }
+
+        public void GoToMenu()
+        {
+            SceneManager.LoadScene("LevelMenu");
+        }
     #endregion
+    
 
 
     #region Spawn Items

@@ -15,16 +15,21 @@ public class TutorFinger : MonoBehaviour
 {
     // Start is called before the first frame update
     public int currentLevel;
+    public LevelGameData gameLevelData;
     public List<TutorialActive> tutorialActives = new List<TutorialActive>();
     RectTransform rectTransform;
     Grid grid;
 
-    void Start()
+    
+
+    private void Start()
     {
         grid = GridGenerator.Instance.grid;
-        currentLevel = GridGenerator.Instance.levels.levelNumber;
         rectTransform = transform.GetChild(0).GetComponent<RectTransform>();
+        currentLevel = gameLevelData.levelNumber;
+        gameObject.SetActive(false);
         SetPosition();
+        
     }
 
     // Update is called once per frame
@@ -49,8 +54,11 @@ public class TutorFinger : MonoBehaviour
             {
                 Vector3 screenPos = Camera.main.WorldToScreenPoint(tutorialActive.objectToTouch);
                 rectTransform.position = screenPos;
+                gameObject.SetActive(true);
             }
+            
         }
+
         
         
 

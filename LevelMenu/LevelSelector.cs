@@ -41,6 +41,14 @@ public class LevelSelector : MonoBehaviour
             }
         }
         
+        //foreach levelObjectives in leves in levelGameData
+        foreach (Levels level in levelGameData.levels)
+        {
+            foreach (LevelObjectives levelObjective in level.levelObjectives)
+            {
+                levelObjective.isCompleted = false;
+            }
+        }
     }
 
     public void LoadLevel(int levelNumber)
