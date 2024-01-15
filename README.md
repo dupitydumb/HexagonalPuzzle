@@ -2,7 +2,7 @@ Unity Hexagonal Puzzle Game
 
 Version control of the code
 <p align="center">
-  <img width="720" height="480" src="https://github.com/dupitydumb/HexagonalPuzzle/assets/37872714/953929ba-e7ec-47c4-a5e8-8ee704da3860)">
+  <img width="600px" height="388" src="https://github.com/dupitydumb/HexagonalPuzzle/assets/37872714/953929ba-e7ec-47c4-a5e8-8ee704da3860)">
 </p>
 
 
