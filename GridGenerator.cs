@@ -10,6 +10,7 @@ public class GridGenerator : MonoBehaviour
     public LevelGameData levels;
     public Grid grid;
     public GameObject guideGrid;
+    public ColorData colorData;
     
     [Header("Hexagon Blocks that will be spawned to the grid"), Tooltip("Hexagon Blocks that will be spawned to the grid")]
     public GameObject[] hexagonBlocks;
@@ -141,6 +142,16 @@ public class GridGenerator : MonoBehaviour
                     hexagonBlock.GetComponent<HexagonBlock>().y = gridContainer.y;
                     hexagonBlock.name = "Hex" + gridContainer.x + ", " + gridContainer.y;
                     gridContainer.gameObject = hexagonBlock;
+                    
+                    //Set the color of the hexagon block
+                    foreach (var data in colorData.data)
+                    {
+                        if (hexagonBlock.GetComponent<HexagonBlock>().hexagonType == data.hexagonType)
+                        {
+                            hexagonBlock.GetComponent<SpriteRenderer>().color = data.color;
+                        }
+                    }
+                    
                 }
             }
             
@@ -200,10 +211,19 @@ public class GridGenerator : MonoBehaviour
                     {
                         prefab.GetComponent<HexagonBlock>().x = hexagonalPostion.x;
                         prefab.GetComponent<HexagonBlock>().y = hexagonalPostion.y;
+                        
+
+                    }
+                    else if (prefab.tag == "GuideGrid")
+                    {
+                        prefab.GetComponent<GuideGrid>().xPos = hexagonalPostion.x;
+                        prefab.GetComponent<GuideGrid>().yPos = hexagonalPostion.y;
                     }
                     GridData.Instance.gridContainers.Add(new GridContainer(hexagonalPostion.x, hexagonalPostion.y, prefab));
                     prefab.name = "Behind: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
                     prefab.transform.SetParent(GameObject.FindWithTag("BehidGridPool").transform);
+                    
+                    
                 }    
             }
             
@@ -390,6 +410,7 @@ public class GridGenerator : MonoBehaviour
             GridData.Instance.gridContainers[gridIndex].gameObject = bomb;
             bomb.GetComponent<BombItems>().xPos = x;
             bomb.GetComponent<BombItems>().yPos = y;
+            
         }
     
         public void SpawnRocket(int x, int y)
@@ -440,6 +461,13 @@ public class GridGenerator : MonoBehaviour
                     topGridContainers[i].gameObject = hexagonBlock;
                     onGridChanges.Invoke();
                     hexagonBlock.transform.SetParent(GameObject.FindWithTag("HexagonBlockPool").transform);
+                    foreach (var data in colorData.data)
+                    {
+                        if (hexagonBlock.GetComponent<HexagonBlock>().hexagonType == data.hexagonType)
+                        {
+                            hexagonBlock.GetComponent<SpriteRenderer>().color = data.color;
+                        }
+                    }
                 }
                 
             }

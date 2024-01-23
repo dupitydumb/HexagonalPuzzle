@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LevelGameData
   m_EditorClassIdentifier: 
   unlockedLevel: 20
-  levelNumber: 9
+  levelNumber: 4
   levels:
   - {fileID: 11400000, guid: aaa67654ff33cf041b813854a4b885dc, type: 2}
   - {fileID: 11400000, guid: 8a3fda4305d65354c953d72939c931ae, type: 2}

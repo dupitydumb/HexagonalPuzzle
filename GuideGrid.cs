@@ -8,6 +8,9 @@ public class GuideGrid : MonoBehaviour
     public Grid grid;
     public TMP_Text text;
     public GameObject textCanvas;
+
+    public int xPos;
+    public int yPos;
     // Start is called before the first frame update
     void Start()
     {
