@@ -219,12 +219,34 @@ public class HexagonBlock : MonoBehaviour
 
     public void DestroyHexagonBlock()
     {
+        //obstacle offset
+        Vector2[] offsetsEven = new Vector2[]
+        {
+            new Vector2(-1, -1),
+            new Vector2(0, -1)
+
+        };
+        Vector2[] offsetsOdd = new Vector2[]
+        {
+            new Vector2(0, -1),
+            new Vector2(1, -1)
+        };
+
         
         //Check is obstacle below
-        int obstacleIndex = GridData.Instance.gridContainers.FindIndex(element => element != null && element.x == x && element.y == y - 1 && element.gameObject.tag == "BoxItems");
-        if (obstacleIndex != -1)
+        Vector2[] offsets = (y % 2 == 0) ? offsetsEven : offsetsOdd;
+        foreach (Vector2 offset in offsets)
         {
-            GridData.Instance.gridContainers[obstacleIndex].gameObject.GetComponent<Box>().DestroyBox(hexagonType);
+            int neighborX = x + (int)offset.x;
+            int neighborY = y + (int)offset.y;
+            if (GridData.Instance.gridContainers.Exists(element => element.x == neighborX && element.y == neighborY))
+            {
+                int neighborIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == neighborX && element.y == neighborY);
+                if (GridData.Instance.gridContainers[neighborIndex].gameObject.tag == "BoxItems")
+                {
+                    GridData.Instance.gridContainers[neighborIndex].gameObject.GetComponent<Box>().DestroyBox(hexagonType);
+                }
+            }
         }
 
 
@@ -232,7 +254,7 @@ public class HexagonBlock : MonoBehaviour
         isDestroying = true;
         //Remove the gameobject from list
         int index = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
-        LeanTween.scale(this.gameObject, new Vector3(2, 2, 0), 0.8f).setEase(LeanTweenType.easeInBack).setOnComplete(() => 
+        LeanTween.scale(this.gameObject.transform.GetChild(0).gameObject, new Vector3(1, 1, 0), 0.5f).setEase(LeanTweenType.easeShake).setOnComplete(() => 
         {
             GridGenerator.Instance.AddScore(hexagonType);
             GridData.Instance.gridContainers[index].gameObject = GridGenerator.Instance.guideGrid;

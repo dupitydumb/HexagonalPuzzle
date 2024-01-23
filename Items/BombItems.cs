@@ -46,16 +46,27 @@ public class BombItems : BoosterItems
     void GetNeighbor()
     {
         // get 5 block of neighbor
-        Vector2[] offsets = new Vector2[5]
+        Vector2[] offsetsEven = new Vector2[]
         {
-            new Vector2(0, 0),
-            new Vector2(0, 1),
+            new Vector2(-1, 0),
+            new Vector2(-1,-1),
             new Vector2(0, -1),
             new Vector2(1, 0),
-            new Vector2(-1, 0)
+            new Vector2(0, 1),
+            new Vector2(-1, 1)
         };
 
-        
+        Vector2[] offsetsOdd = new Vector2[]
+        {
+            new Vector2(-1, 0),
+            new Vector2(0, -1),
+            new Vector2(1, -1),
+            new Vector2(1, 0),
+            new Vector2(1, 1),
+            new Vector2(0, 1)
+        };
+
+        Vector2[] offsets = (this.yPos % 2 == 0) ? offsetsEven : offsetsOdd;
 
         Vector2[] neighborPos = new Vector2[5];
         for (int i = 0; i < 5; i++)
