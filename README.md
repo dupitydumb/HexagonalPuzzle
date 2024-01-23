@@ -1,6 +1,6 @@
 # Unity Hexagonal Puzzle Game
 
-This repository contains the version-controlled code for a hexagonal puzzle game developed in Unity.
+This repository contains the version-controlled code for a hexagonal puzzle game developed in `Unity 2021.3.18f1`
 
 ## Game Overview
 
