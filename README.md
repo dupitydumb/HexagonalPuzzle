@@ -19,3 +19,9 @@ To install the game, clone this repository and open the project in Unity.
 ## Usage
 
 To play the game, navigate to the main scene and press the play button in Unity.
+
+## To Do
+
+- [] adjust the board size so that it will not be cropped in most Android screens
+- [] add tutorials
+- [] add a losing condition based on number of moves
