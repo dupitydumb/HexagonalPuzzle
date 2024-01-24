@@ -53,6 +53,10 @@ public class GridGenerator : MonoBehaviour
     public int WhiteHex;
     public int ObstacleScore;
 
+    [Header("Grid Width and Height")]
+    public int gridWidth;
+    public int gridHeight;
+
     public GameObject CompletePanel;
 
     public UnityEvent onMoves = new UnityEvent();
