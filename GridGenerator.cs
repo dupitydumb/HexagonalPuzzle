@@ -443,6 +443,7 @@ public class GridGenerator : MonoBehaviour
     
         public void SpawnRocket(int x, int y)
         {
+            int randomType = Random.Range(0, 2);
             isSpawning = true;
             Vector3Int cellPos = new Vector3Int(x, y, 0);
             Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
@@ -451,6 +452,17 @@ public class GridGenerator : MonoBehaviour
             GridData.Instance.gridContainers[index].gameObject = gameObject;
             rocket.GetComponent<RocketItems>().xPos = x;
             rocket.GetComponent<RocketItems>().yPos = y;
+            Debug.Log("RandomType = " + randomType);
+            rocket.GetComponent<RocketItems>().rocketDirection = (RocketDirection)randomType;
+            //Set Rotation
+            if (randomType == 0)
+            {
+                rocket.transform.GetChild(0).transform.rotation = Quaternion.Euler(0,0,0);
+            }
+            else
+            {
+                rocket.transform.GetChild(0).transform.rotation = Quaternion.Euler(0,0,90);
+            }
             
         }
 

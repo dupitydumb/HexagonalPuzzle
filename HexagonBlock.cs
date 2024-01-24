@@ -122,7 +122,7 @@ public class HexagonBlock : MonoBehaviour
                 Destroy(this.gameObject);
             }
 
-            if (matchNeighbors.Count >= 6 && matchNeighbors != null)
+            if (matchNeighbors.Count >= 1 && matchNeighbors != null)
             {
                 GridGenerator.Instance.SpawnRocket(x, y);
                 foreach (Vector2 neighbor in matchNeighbors)

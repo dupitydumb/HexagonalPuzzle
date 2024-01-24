@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum RocketDirection
+{
+    Vertical,
+    Horizontal
+}
 public class RocketItems : BoosterItems
 {
 
+    public RocketDirection rocketDirection;
     private Animator anim;
     // Start is called before the first frame update
     void Start()
@@ -56,18 +62,10 @@ public class RocketItems : BoosterItems
 
         //Get all neighbors until it reaches the edge of the grid
         List<Vector2> neighborPos = new List<Vector2>();
-        foreach (Vector2 offset in offsetsVertical)
-        {
-            int x = xPos;
-            int y = yPos;
-            while (x >= xLimitLow && x <= xLimitHigh && y >= yLimitLow && y <= yLimitHigh)
-            {
-                neighborPos.Add(new Vector2(x, y));
-                x += (int)offset.x;
-                y += (int)offset.y;
-            }
-        }
-        foreach (Vector2 offset in offsetsHorizontal)
+        
+        Vector2[] offsets = (rocketDirection == RocketDirection.Vertical) ? offsetsVertical : offsetsHorizontal;
+
+        foreach (Vector2 offset in offsets)
         {
             int x = xPos;
             int y = yPos;
