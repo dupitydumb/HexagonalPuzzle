@@ -23,6 +23,7 @@ MonoBehaviour:
   - hexagonType: 3
     count: 20
     isCompleted: 0
+  moves: 15
   levels:
   - hexagonalPostions:
     - hexagonPrefab: {fileID: 1249067264560960518, guid: 039fd1dbbda2fd84d9c8ee52b63e9660, type: 3}

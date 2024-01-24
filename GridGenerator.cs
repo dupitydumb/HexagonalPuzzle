@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -25,6 +26,8 @@ public class GridGenerator : MonoBehaviour
     public bool isItemsActive = false;
     public bool isSpawning = false;
 
+    public bool isHasMove = false; 
+
     [Space(30)]
     [Header("Top Grid Where Hexagon Blocks will be spawned")]
     public List<GridContainer> topGridContainers = new List<GridContainer>();
@@ -32,9 +35,13 @@ public class GridGenerator : MonoBehaviour
 
     [Header("Is this a guide grid?")]
     [Tooltip("If this is a guide grid, it will generate a grid with text on it")]
-    public bool isGuideGrid = false;
+    public bool isGuideGrid = true;
 
     public static GridGenerator Instance;
+
+    [Header("Player Moves")]
+    public int moves;
+    public TMP_Text movesText;
 
     [Header("In Game Score")]
     public int RedHex;
@@ -47,6 +54,8 @@ public class GridGenerator : MonoBehaviour
     public int ObstacleScore;
 
     public GameObject CompletePanel;
+
+    public UnityEvent onMoves = new UnityEvent();
     
     void Awake()
     {
@@ -75,7 +84,12 @@ public class GridGenerator : MonoBehaviour
             Time.timeScale = 1f;
             CheckTopGrid();
             AddTopGridCellPos();
-            
+
+            //Set Moves
+            moves = levels.levels[levels.levelNumber].moves;
+            movesText.text = moves.ToString();
+            onMoves.AddListener(DecreaseMoves);
+
         }
         
     }
@@ -232,6 +246,20 @@ public class GridGenerator : MonoBehaviour
         }
     #endregion
 
+
+    #region Moves
+        public void DecreaseMoves()
+        {
+            moves--;
+            movesText.text = moves.ToString();
+            if (moves <= 0)
+            {
+                isHasMove = false;
+                //Game Over
+                Debug.Log("Game Over");
+            }
+        }
+    #endregion    
     #region Score
         public void AddScore(HexagonType type)
             {

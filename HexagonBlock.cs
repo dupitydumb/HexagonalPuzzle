@@ -80,11 +80,12 @@ public class HexagonBlock : MonoBehaviour
     /// </summary>
     void OnMouseOver()
     {
-        if (Input.GetMouseButtonDown(0) && !isMoving && !isDestroying && !GridGenerator.Instance.isBombing)
+        if (Input.GetMouseButtonDown(0) && !isMoving && !isDestroying && !GridGenerator.Instance.isBombing && !GridGenerator.Instance.isHasMove)
         {
 
             if (matchNeighbors.Count >= 11 && matchNeighbors != null)
             {
+                GridGenerator.Instance.onMoves.Invoke();
                 GridGenerator.Instance.SpawnDisco(x, y, hexagonType);
                 GridGenerator.Instance.isBombing = true;
                 foreach (Vector2 neighbor in matchNeighbors)
@@ -96,7 +97,7 @@ public class HexagonBlock : MonoBehaviour
                     }
                     
                 }
-                
+                GridGenerator.Instance.onMoves.Invoke();
                 matchNeighbors.Clear();
                 visited.Clear();
                 GridGenerator.Instance.isBombing = false;
@@ -115,7 +116,7 @@ public class HexagonBlock : MonoBehaviour
                     }
                     
                 }
-                
+                GridGenerator.Instance.onMoves.Invoke();
                 matchNeighbors.Clear();
                 visited.Clear();
                 Destroy(this.gameObject);
@@ -133,6 +134,7 @@ public class HexagonBlock : MonoBehaviour
                     }
                     
                 }
+                GridGenerator.Instance.onMoves.Invoke();
                 matchNeighbors.Clear();
                 visited.Clear();
                 Destroy(this.gameObject);
@@ -149,6 +151,7 @@ public class HexagonBlock : MonoBehaviour
                     }
                     
                 }
+                GridGenerator.Instance.onMoves.Invoke();
                 matchNeighbors.Clear();
                 visited.Clear();
             }

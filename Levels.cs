@@ -11,6 +11,10 @@ public class Levels : ScriptableObject
     [Space(10)]
     public List<LevelObjectives> levelObjectives = new List<LevelObjectives>();
 
+    [Header("Moves")]
+    [Space(10)]
+    public int moves;
+
     [Header("Level Data")]
     [Space(10)]
     [SerializeField]
