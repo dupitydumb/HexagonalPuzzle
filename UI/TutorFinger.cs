@@ -1,12 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using Microsoft.Unity.VisualStudio.Editor;
 
 [System.Serializable]
 public class TutorialActive
 {
     public int levelNumber;
     public Vector3 objectToTouch;
+
+    public Sprite image;
+    public string textDescription;
+    public string bottomTextDescription;
 }
 
 
@@ -17,7 +24,12 @@ public class TutorFinger : MonoBehaviour
     public int currentLevel;
     public LevelGameData gameLevelData;
     public List<TutorialActive> tutorialActives = new List<TutorialActive>();
-    RectTransform rectTransform;
+    [SerializeField] private Transform rectTransform;
+    [SerializeField] private UnityEngine.UI.Image image;
+    [SerializeField] private TMP_Text textDescription;
+    [SerializeField] private TMP_Text bottomTextDescription;
+
+    [SerializeField] private GameObject ImageWindow;
     Grid grid;
 
     
@@ -25,7 +37,6 @@ public class TutorFinger : MonoBehaviour
     private void Start()
     {
         grid = GridGenerator.Instance.grid;
-        rectTransform = transform.GetChild(0).GetComponent<RectTransform>();
         currentLevel = gameLevelData.levelNumber;
         gameObject.SetActive(false);
         SetPosition();
@@ -35,6 +46,7 @@ public class TutorFinger : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (Input.GetMouseButtonDown(0))
         {
             gameObject.SetActive(false);
@@ -52,9 +64,22 @@ public class TutorFinger : MonoBehaviour
         {
             if (tutorialActive.levelNumber == currentLevel)
             {
-                Vector3 screenPos = Camera.main.WorldToScreenPoint(tutorialActive.objectToTouch);
-                rectTransform.position = screenPos;
+                
                 gameObject.SetActive(true);
+                rectTransform.localPosition = tutorialActive.objectToTouch;
+                textDescription.text = tutorialActive.textDescription;
+                bottomTextDescription.text = tutorialActive.bottomTextDescription;
+                Debug.Log("Set position" + tutorialActive.objectToTouch);
+
+                if (tutorialActive.image != null)
+                {
+                    image.sprite = tutorialActive.image;
+                }
+                else
+                {
+                    ImageWindow.SetActive(false);
+                }
+                
             }
             
         }

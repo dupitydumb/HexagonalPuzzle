@@ -38,7 +38,7 @@ public class HexagonBlock : MonoBehaviour
     private bool isDestroying = false;
 
     
-
+    [SerializeField] ColorData colorData;
 
 
     // Start is called before the first frame update
@@ -47,6 +47,7 @@ public class HexagonBlock : MonoBehaviour
         grid = GameObject.FindWithTag("Grid").GetComponent<Grid>();
         //add event listener
         GridGenerator.Instance.onGridChanges.AddListener(OnChange);
+        SetColor();
         Invoke("AfterSpawn", 0.2f);
         
     }
@@ -54,6 +55,17 @@ public class HexagonBlock : MonoBehaviour
     void AfterSpawn()
     {
         CheckMatch(this);
+    }
+
+    void SetColor()
+    {
+        foreach (Data data in colorData.data)
+        {
+            if (data.hexagonType == hexagonType)
+            {
+                this.gameObject.GetComponent<SpriteRenderer>().color = data.color;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -275,7 +287,7 @@ public class HexagonBlock : MonoBehaviour
 
     public void CheckMatch(HexagonBlock currentblock)
     {   
-        
+        /* Using Hexagonal Flat Top Tilemaps For Documentation of the vector see here https://docs.unity3d.com/Manual/Tilemap-Hexagonal.html */
         Vector2[] offsetsEven = new Vector2[]
         {
             new Vector2(-1, 0),

@@ -58,7 +58,7 @@ public class GridGenerator : MonoBehaviour
     public int gridHeight;
 
     public GameObject CompletePanel;
-
+    public GameObject GameOverPanel;
     public UnityEvent onMoves = new UnityEvent();
     
     void Awake()
@@ -237,10 +237,21 @@ public class GridGenerator : MonoBehaviour
                         prefab.GetComponent<GuideGrid>().xPos = hexagonalPostion.x;
                         prefab.GetComponent<GuideGrid>().yPos = hexagonalPostion.y;
                     }
+
+                    if (prefab.tag != "GuideGrid")
+                    {
+                        GameObject guideGrid = Instantiate(this.guideGrid, cellCenterPos, Quaternion.Euler(0,0,90));
+                        guideGrid.GetComponent<GuideGrid>().xPos = hexagonalPostion.x;
+                        guideGrid.GetComponent<GuideGrid>().yPos = hexagonalPostion.y;
+                        guideGrid.name = "Guide: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
+                        guideGrid.transform.SetParent(GameObject.FindWithTag("BehidGridPool").transform);
+                        guideGrid.tag = "Untagged";
+                    }
                     GridData.Instance.gridContainers.Add(new GridContainer(hexagonalPostion.x, hexagonalPostion.y, prefab));
                     prefab.name = "Behind: " + hexagonalPostion.x + ", " + hexagonalPostion.y;
                     prefab.transform.SetParent(GameObject.FindWithTag("BehidGridPool").transform);
                     
+                    //if prefab is not guide grid also place guide grid
                     
                 }    
             }
@@ -261,6 +272,8 @@ public class GridGenerator : MonoBehaviour
                 isHasMove = false;
                 //Game Over
                 Debug.Log("Game Over");
+                GameOverPanel.SetActive(true);
+                Time.timeScale = 0f;
             }
         }
     #endregion    
@@ -421,7 +434,10 @@ public class GridGenerator : MonoBehaviour
             
                 
         }
-
+        public void RestartLevel()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
         public void GoToMenu()
         {
             SceneManager.LoadScene("LevelMenu");
@@ -497,6 +513,9 @@ public class GridGenerator : MonoBehaviour
                 {
                     int randomIndex = Random.Range(0, hexagonBlocks.Length);
                     GameObject hexagonBlock = Instantiate(hexagonBlocks[randomIndex], topGridCellPos[i], Quaternion.Euler(0,0,90));
+                    //Spawn animation
+                    hexagonBlock.transform.localScale = new Vector3(0,0,0);
+                    LeanTween.scale(hexagonBlock, new Vector3(0.9962518f ,1.16f ,1), 0.2f).setEase(LeanTweenType.easeInBack);
                     hexagonBlock.transform.position = topGridCellPos[i];
                     hexagonBlock.GetComponent<HexagonBlock>().x = topGridContainers[i].x;
                     hexagonBlock.GetComponent<HexagonBlock>().y = topGridContainers[i].y;

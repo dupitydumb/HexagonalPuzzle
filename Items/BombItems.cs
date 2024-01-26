@@ -68,13 +68,11 @@ public class BombItems : BoosterItems
 
         Vector2[] offsets = (this.yPos % 2 == 0) ? offsetsEven : offsetsOdd;
 
-        Vector2[] neighborPos = new Vector2[5];
-        for (int i = 0; i < 5; i++)
+        List<Vector2> neighborPos = new List<Vector2>();
+        foreach (Vector2 offset in offsets)
         {
-            if (xPos + offsets[i].x >= xLimitLow && xPos + offsets[i].x <= xLimitHigh && yPos + offsets[i].y >= yLimitLow && yPos + offsets[i].y <= yLimitHigh)
-            {
-                neighborPos[i] = new Vector2(xPos + offsets[i].x, yPos + offsets[i].y);
-            }
+            Vector2 neighborCoord = new Vector2(this.xPos + offset.x, this.yPos + offset.y);
+            neighborPos.Add(neighborCoord);
         }
 
         foreach (Vector2 pos in neighborPos)
