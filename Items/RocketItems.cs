@@ -79,14 +79,24 @@ public class RocketItems : BoosterItems
 
         foreach (Vector2 pos in neighborPos)
         {
-            int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == pos.x && element.y == pos.y && element.gameObject.tag == "HexagonBlock");
+            int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == pos.x && element.y == pos.y && element.gameObject.tag == "HexagonBlock" || element.x == pos.x && element.y == pos.y && element.gameObject.tag == "BoxItems");
             if (gridIndex != -1)
             {
-                GridData.Instance.gridContainers[gridIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
+                var element = GridData.Instance.gridContainers[gridIndex];
+                
+                if (element.gameObject.tag == "HexagonBlock")
+                {
+                    GridData.Instance.gridContainers[gridIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
+                }
+                if (element.gameObject.tag == "BoxItems")
+                {
+                    GridData.Instance.gridContainers[gridIndex].gameObject.GetComponent<Box>().DestroyBox(HexagonType.Rocket);
+                }
+                
             }
         }
         StartCoroutine(RocketAnimation());
-
+        
     }
 
     IEnumerator RocketAnimation()

@@ -8,6 +8,19 @@ public class ColorData : ScriptableObject
     
 {
     public List<Data> data = new List<Data>();
+
+    //Color Data Need to add form list
+    public Color32 GetColor(HexagonType hexagonType)
+    {
+        foreach (var item in data)
+        {
+            if (item.hexagonType == hexagonType)
+            {
+                return item.color;
+            }
+        }
+        return Color.white;
+    }
 }
 
 [System.Serializable]

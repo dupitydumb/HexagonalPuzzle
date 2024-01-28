@@ -13,11 +13,12 @@ public enum BoxColor
 
 public class Box : ObstacleItems
 {
+    [SerializeField] ColorData colorData;
     public BoxColor boxColor;
     // Start is called before the first frame update
     void Start()
     {
-        
+        SetBackgroundColor();
     }
 
     // Update is called once per frame
@@ -26,8 +27,37 @@ public class Box : ObstacleItems
         
     }
 
+    void SetBackgroundColor()
+    {
+        switch (boxColor)
+        {
+            case BoxColor.Any:
+                break;
+            case BoxColor.Red:
+                GetComponent<SpriteRenderer>().color = colorData.GetColor(HexagonType.Red);
+                break;
+            case BoxColor.Blue:
+                GetComponent<SpriteRenderer>().color = colorData.GetColor(HexagonType.Blue);
+                break;
+            case BoxColor.Green:
+                GetComponent<SpriteRenderer>().color = colorData.GetColor(HexagonType.Green);
+                break;
+            case BoxColor.Yellow:
+                GetComponent<SpriteRenderer>().color = colorData.GetColor(HexagonType.Yellow);
+                break;
+            default:
+                break;
+        }
+    }
+
     public void DestroyBox(HexagonType hexagonType)
     {
+        switch (hexagonType)
+        {
+            case HexagonType.Rocket:
+                DestroyObstacle();
+                break;
+        }
         switch (boxColor)
         {
             case BoxColor.Any:
