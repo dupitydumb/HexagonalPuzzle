@@ -19,6 +19,12 @@ public enum HexagonType
     Empty
 }
 
+public enum MoveTo{
+    Left,
+    Right
+
+}
+
 
 public class HexagonBlock : MonoBehaviour
 {
@@ -27,6 +33,8 @@ public class HexagonBlock : MonoBehaviour
     public int x;
     public int y;
     public HexagonType hexagonType;
+    public MoveTo moveTo;
+    bool isOdd;
 
     [Header("Hexagon Block Data")]
     public float speed = 1f;
@@ -72,19 +80,20 @@ public class HexagonBlock : MonoBehaviour
     void Update()
     {
         
-        if (CheckBelow())
+        if(CheckBelow() == true)
         {
             MoveDown();
         }
-        else
+        
+        if (isMoving == false && isDestroying == false)
         {
-            if (isMoving == false && isDestroying == false)
-            {
-                CheckMatch(this);
-            }
+            CheckMatch(this);
         }
+        
 
     }
+
+    
 
 
     /// <summary>
@@ -174,6 +183,17 @@ public class HexagonBlock : MonoBehaviour
 
     public void OnChange()
     {
+        //check y is odd or even
+        isOdd = (y % 2 == 0) ? true : false;
+
+        if (isOdd)
+        {
+            moveTo = MoveTo.Left;
+        }
+        else
+        {
+            moveTo = MoveTo.Right;
+        }
         Log("On Change");
         matchNeighbors.Clear();
         visited.Clear();
@@ -183,9 +203,7 @@ public class HexagonBlock : MonoBehaviour
 
     private void MoveDown()
     {
-        
         isMoving = true;
-        Vector3Int cellPos = new Vector3Int(x, y - 1, 0);
         Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
         transform.position = Vector3.MoveTowards(transform.position, cellCenterPos, speed * Time.deltaTime);
 
@@ -196,39 +214,84 @@ public class HexagonBlock : MonoBehaviour
         {
             isMoving = false;
             //Find Next position index from list
-            int nextIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y - 1);
+            int nextIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == cellPos.x && element.y == cellPos.y);
             GridData.Instance.gridContainers[nextIndex].gameObject = this.gameObject;
             //Remove previous position index from list
             int previousIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == x && element.y == y);
             GridData.Instance.gridContainers[previousIndex].gameObject = GridGenerator.Instance.guideGrid;
-            y -= 1;
-            
+            //Set new position
+            x = cellPos.x;
+            y = cellPos.y;
+
+            //Remove occupied
+            GridData.Instance.gridContainers.Find(element => element.x == x && element.y == y).isOccupied = null;
             
         }
         CheckMatch(this);
         
     }
+    Vector3Int cellPos = new Vector3Int();
 
+
+   
     public bool CheckBelow()
     {
-        
-        if (isDestroying == false)
+
+        if (isDestroying == false )
         {
-            Vector3Int cellPos = new Vector3Int(x, y - 1, 0);
+            //Check Left
+            bool isChecking = true;
+            //if odd
+            if (isOdd)
+            {
+                switch (moveTo)
+                {
+                    case MoveTo.Left:
+                        cellPos = new Vector3Int(x - 1, y - 1, 0);
+                        break;
+                    case MoveTo.Right:
+                        cellPos = new Vector3Int(x, y - 1, 0);
+                        break;
+                }
+                isChecking = false;
+            }
+            if (!isOdd)
+            {
+                switch (moveTo)
+                {
+                    case MoveTo.Left:
+                        cellPos = new Vector3Int(x, y - 1, 0);
+                        break;
+                    case MoveTo.Right:
+                        cellPos = new Vector3Int(x + 1, y - 1, 0);
+                        break;
+                }
+                isChecking = false;
+            }
             // Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
             //If below is empty return true
 
-            if (GridData.Instance == null || GridData.Instance.gridContainers == null)
+            if (isChecking == false)
             {
-                return false;
+                if (GridData.Instance == null || GridData.Instance.gridContainers == null)
+                {
+                    return false;
+                }
+                if (GridData.Instance.gridContainers.Exists(element => element.x == cellPos.x && element.y == cellPos.y && element.gameObject.tag == "GuideGrid" && element.gameObject.tag != "HexagonBlock" && element.gameObject != null))
+                {
+                    GridData.Instance.gridContainers.Find(element => element.x == cellPos.x && element.y == cellPos.y).isOccupied = this.gameObject;
+                    return true;
+                }
+                if (GridData.Instance.gridContainers.Exists(element => element.x == cellPos.x && element.y == cellPos.y && element.isOccupied == this.gameObject))
+                {
+                    return true;
+                
+                }
             }
-            if (GridData.Instance.gridContainers.Exists(element => element.x == x && element.y == y - 1 && element.gameObject.tag == "GuideGrid" && element.gameObject.tag != "HexagonBlock"))
-            {
-                return true;
-            }
+            
         }
-
-        return false;    
+        return false;
+        
         
     }
 
