@@ -12,6 +12,9 @@ public class GridGenerator : MonoBehaviour
     public Grid grid;
     public GameObject guideGrid;
     public ColorData colorData;
+
+    public MoveTo moveDirection;
+    public bool isMoving = false;
     
     [Header("Hexagon Blocks that will be spawned to the grid"), Tooltip("Hexagon Blocks that will be spawned to the grid")]
     public GameObject[] hexagonBlocks;
@@ -60,6 +63,8 @@ public class GridGenerator : MonoBehaviour
     public GameObject CompletePanel;
     public GameObject GameOverPanel;
     public UnityEvent onMoves = new UnityEvent();
+
+    public UnityEvent onMoveChange = new UnityEvent();
     
     void Awake()
     {
@@ -72,6 +77,42 @@ public class GridGenerator : MonoBehaviour
             Destroy(this);
         }    
     }
+
+    //Function to change move Direction every second
+    public void ChangeMoveDirection()
+    {
+        if (!isMoving)
+        {
+            if (moveDirection == MoveTo.Right)
+            {
+                moveDirection = MoveTo.Left;
+            }
+            else
+            {
+                moveDirection = MoveTo.Right;
+            }
+        }
+    }
+
+    //Check is there any moving hexagon block
+    public void CheckMovingHexagonBlock()
+    {
+        foreach (var gridContainer in GridData.Instance.gridContainers)
+        {
+            if (gridContainer.gameObject.tag == "HexagonBlock")
+            {
+                if (gridContainer.gameObject.GetComponent<HexagonBlock>().isMoving)
+                {
+                    isMoving = true;
+                    return;
+                }
+            }
+        }
+        isMoving = false;
+    }
+    
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -93,9 +134,16 @@ public class GridGenerator : MonoBehaviour
             moves = levels.levels[levels.levelNumber].moves;
             movesText.text = moves.ToString();
             onMoves.AddListener(DecreaseMoves);
-
+            
         }
+        InvokeRepeating("MoveChange", 0, 0.03f);
+        InvokeRepeating("ChangeMoveDirection", 0, 1f);
         
+    }
+
+    void MoveChange()
+    {
+        onMoveChange.Invoke();
     }
 
     // Update is called once per frame
@@ -140,7 +188,7 @@ public class GridGenerator : MonoBehaviour
             
         }
     
-        //Check if top of the grid is empty
+        
         
     
         

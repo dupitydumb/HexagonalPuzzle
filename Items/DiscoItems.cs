@@ -59,7 +59,8 @@ public class DiscoItems : BoosterItems
         //find this position in gridContainer
         LeanTween.scale(gameObject, new Vector3(3, 3, 0), 0.5f).setOnComplete(() => {
             GridGenerator.Instance.isItemsActive = false;
-            
+            int gridIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == xPos && element.y == yPos);
+            GridData.Instance.gridContainers[gridIndex].gameObject = GridGenerator.Instance.guideGrid;
             Destroy(gameObject);
         });
     }

@@ -15,10 +15,10 @@ MonoBehaviour:
   levelNumber: 1
   levelObjectives:
   - hexagonType: 2
-    count: 5
+    count: 500
     isCompleted: 0
   - hexagonType: 0
-    count: 5
+    count: 500
     isCompleted: 0
   moves: 15
   levels:

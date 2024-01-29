@@ -7,6 +7,7 @@ public class GridContainer
 {
     public int x;
     public int y;
+    public GameObject isOccupied;
     public GameObject gameObject;
     public GridContainer(int x, int y, GameObject gameObject)
     {

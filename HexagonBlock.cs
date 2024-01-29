@@ -42,7 +42,7 @@ public class HexagonBlock : MonoBehaviour
 
     [Header("Hexagon Block Status")]
     [SerializeField]
-    private bool isMoving = false;
+    public bool isMoving = false;
     private bool isDestroying = false;
 
     
@@ -55,6 +55,7 @@ public class HexagonBlock : MonoBehaviour
         grid = GameObject.FindWithTag("Grid").GetComponent<Grid>();
         //add event listener
         GridGenerator.Instance.onGridChanges.AddListener(OnChange);
+        ChangeMoveTo();
         SetColor();
         Invoke("AfterSpawn", 0.2f);
         
@@ -79,6 +80,7 @@ public class HexagonBlock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        moveTo = GridGenerator.Instance.moveDirection;
         
         if(CheckBelow() == true)
         {
@@ -180,20 +182,19 @@ public class HexagonBlock : MonoBehaviour
             
         }
     }
+    bool hasChange = false;
+    void ChangeMoveTo()
+    {
+        
+        
+        
+    }
 
     public void OnChange()
     {
         //check y is odd or even
         isOdd = (y % 2 == 0) ? true : false;
-
-        if (isOdd)
-        {
-            moveTo = MoveTo.Left;
-        }
-        else
-        {
-            moveTo = MoveTo.Right;
-        }
+        hasChange = false;
         Log("On Change");
         matchNeighbors.Clear();
         visited.Clear();
@@ -204,6 +205,7 @@ public class HexagonBlock : MonoBehaviour
     private void MoveDown()
     {
         isMoving = true;
+        GridGenerator.Instance.isMoving = true;
         Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
         transform.position = Vector3.MoveTowards(transform.position, cellCenterPos, speed * Time.deltaTime);
 
@@ -213,6 +215,7 @@ public class HexagonBlock : MonoBehaviour
         if (transform.position == cellCenterPos)
         {
             isMoving = false;
+            GridGenerator.Instance.isMoving = false;
             //Find Next position index from list
             int nextIndex = GridData.Instance.gridContainers.FindIndex(element => element.x == cellPos.x && element.y == cellPos.y);
             GridData.Instance.gridContainers[nextIndex].gameObject = this.gameObject;
