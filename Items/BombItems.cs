@@ -84,7 +84,7 @@ public class BombItems : BoosterItems
                 gridData.gridContainers[gridIndex].gameObject.GetComponent<HexagonBlock>().DestroyHexagonBlock();
             }
 
-            if (gridData.gridContainers[gridIndex].gameObject.tag == "Box")
+            if (gridData.gridContainers[gridIndex].gameObject.tag == "BoxItems")
             {
                 gridData.gridContainers[gridIndex].gameObject.GetComponent<Box>().DestroyObstacle();
             }    

@@ -12,14 +12,14 @@ public class CameraAdjust : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Invoke("SetCameraCenter", 0.3f);
+        // Invoke("SetCameraCenter", 0.3f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        SetCameraCenter();
-        SetCameraSize();
+        // SetCameraCenter();
+        // SetCameraSize();
     }
 
     void SetCameraCenter()
@@ -42,27 +42,38 @@ public class CameraAdjust : MonoBehaviour
         maincamera.transform.position = new Vector3(xCenter + xOffSet, yCenter + yOffSet, -10);
     }
 
+    //Get screen size and set camera size
+
+
+
     void SetCameraSize()
     {
-        GridData gridData = GridData.Instance;
-        float xHigh = gridData.xLimitHigh;
-        float xLow = gridData.xLimitLow;
-        float yHigh = gridData.yLimitHigh;
-        float yLow = gridData.yLimitLow;
-
-        float xSize = xHigh - xLow;
-        float ySize = yHigh - yLow;
-
-        float cameraSize = 0;
-        if (xSize > ySize)
+        int width = Screen.width;
+        int height = Screen.height;
+        //Adjust camera offset base on screen size
+        if (width > 1600)
         {
-            cameraSize = xSize / 2;
+            cameraSizeOffset = -4.5f;
+        }
+        if (width > 1000)
+        {
+            cameraSizeOffset = -4.00f;
+        }
+        else if (width > 800)
+        {
+            cameraSizeOffset = 0.3f;
+        }
+        else if (width > 600)
+        {
+            cameraSizeOffset = 0.5f;
         }
         else
         {
-            cameraSize = ySize / 2;
+            cameraSizeOffset = 0f;
         }
+        float cameraSize = (height / 2) / 100f;
+        cameraSize += cameraSizeOffset;
+        maincamera.orthographicSize = cameraSize;
 
-        maincamera.orthographicSize = cameraSize + cameraSizeOffset;
     }
 }

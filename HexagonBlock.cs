@@ -57,6 +57,7 @@ public class HexagonBlock : MonoBehaviour
         GridGenerator.Instance.onGridChanges.AddListener(OnChange);
         ChangeMoveTo();
         SetColor();
+        OnChange();
         Invoke("AfterSpawn", 0.2f);
         
     }
@@ -242,37 +243,9 @@ public class HexagonBlock : MonoBehaviour
 
         if (isDestroying == false )
         {
-            //Check Left
-            bool isChecking = true;
-            //if odd
-            if (isOdd)
-            {
-                switch (moveTo)
-                {
-                    case MoveTo.Left:
-                        cellPos = new Vector3Int(x - 1, y - 1, 0);
-                        break;
-                    case MoveTo.Right:
-                        cellPos = new Vector3Int(x, y - 1, 0);
-                        break;
-                }
-                isChecking = false;
-            }
-            if (!isOdd)
-            {
-                switch (moveTo)
-                {
-                    case MoveTo.Left:
-                        cellPos = new Vector3Int(x, y - 1, 0);
-                        break;
-                    case MoveTo.Right:
-                        cellPos = new Vector3Int(x + 1, y - 1, 0);
-                        break;
-                }
-                isChecking = false;
-            }
-            // Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
-            //If below is empty return true
+            bool isChecking = false;
+            //PointTop Hexagon
+            cellPos = new Vector3Int(x - 1, y, 0);
 
             if (isChecking == false)
             {
@@ -303,14 +276,22 @@ public class HexagonBlock : MonoBehaviour
         //obstacle offset
         Vector2[] offsetsEven = new Vector2[]
         {
-            new Vector2(-1, -1),
-            new Vector2(0, -1)
+            new Vector2(-1, 0),
+            new Vector2(-1,-1),
+            new Vector2(0, -1),
+            new Vector2(1, 0),
+            new Vector2(0, 1),
+            new Vector2(-1, 1)
 
         };
         Vector2[] offsetsOdd = new Vector2[]
         {
+            new Vector2(-1, 0),
             new Vector2(0, -1),
-            new Vector2(1, -1)
+            new Vector2(1, -1),
+            new Vector2(1, 0),
+            new Vector2(1, 1),
+            new Vector2(0, 1)
         };
 
         
