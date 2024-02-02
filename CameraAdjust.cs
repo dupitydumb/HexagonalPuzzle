@@ -11,6 +11,8 @@ public class CameraAdjust : MonoBehaviour
     public float cameraSizeOffset;
     public float xOffSet;
     public float yOffSet;
+    float timer = 0.5f;
+    bool isCanCenter = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,9 +28,20 @@ public class CameraAdjust : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // SetCameraCenter();
+
+        if (isCanCenter)
+        {
+            SetCameraCenter();
+        }
         
-        SetCameraCenter();
+        if (timer > 0)
+        {
+            timer -= Time.deltaTime;
+        }
+        else
+        {
+            isCanCenter = false;
+        }
     }
 
     void GetScreenSize()
