@@ -491,7 +491,6 @@ public class GridGenerator : MonoBehaviour
         public void SpawnBomb(int x, int y)
         {
             isSpawning = true;
-            isBombing = true;
             Vector3Int cellPos = new Vector3Int(x, y, 0);
             Vector3 cellCenterPos = grid.GetCellCenterWorld(cellPos);
             GameObject bomb = Instantiate(bombItem, cellCenterPos, Quaternion.Euler(0,0,0));
@@ -556,7 +555,7 @@ public class GridGenerator : MonoBehaviour
                     GameObject hexagonBlock = Instantiate(hexagonBlocks[randomIndex], topGridCellPos[i], Quaternion.Euler(0,0,0));
                     //Spawn animation
                     hexagonBlock.transform.localScale = new Vector3(0,0,0);
-                    LeanTween.scale(hexagonBlock, new Vector3(0.9962518f ,1.16f ,1), 0.1f).setEase(LeanTweenType.easeInBack);
+                    LeanTween.scale(hexagonBlock, new Vector3(1f ,1f ,1), 0.1f).setEase(LeanTweenType.easeInBack);
                     hexagonBlock.transform.position = topGridCellPos[i];
                     hexagonBlock.GetComponent<HexagonBlock>().x = topGridContainers[i].x;
                     hexagonBlock.GetComponent<HexagonBlock>().y = topGridContainers[i].y;

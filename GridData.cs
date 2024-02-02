@@ -35,6 +35,8 @@ public class GridData : MonoBehaviour
         {
             Destroy(this);
         }
+
+        GetLimit();
     }
 
     void Start()
@@ -45,9 +47,9 @@ public class GridData : MonoBehaviour
 
     void GetLimit()
     {
-        xLimitLow = 0;
+        xLimitLow = 5;
         xLimitHigh = 0;
-        yLimitLow = 0;
+        yLimitLow = 5;
         yLimitHigh = 0;
         foreach (GridContainer gridContainer in gridContainers)
         {

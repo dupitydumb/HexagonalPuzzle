@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraAdjust : MonoBehaviour
@@ -12,34 +14,53 @@ public class CameraAdjust : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Invoke("SetCameraCenter", 0.3f);
+        SetCameraCenter();
+        SetCameraSize();
     }
 
+    void Awake()
+    {
+        
+        
+    }
     // Update is called once per frame
     void Update()
     {
         // SetCameraCenter();
-        // SetCameraSize();
+        
+        SetCameraCenter();
+    }
+
+    void GetScreenSize()
+    {
+        int width = Screen.width;
+        int height = Screen.height;
+        Debug.Log("Scrren Width: " + width);
+        Debug.Log("Scrren Height: " + height);
     }
 
     void SetCameraCenter()
     {
-        GridData gridData = GridData.Instance;
-        float xHigh = gridData.xLimitHigh;
-        float xLow = gridData.xLimitLow;
-        float yHigh = gridData.yLimitHigh;
-        float yLow = gridData.yLimitLow;
+        
+        int xCenter;
+        int yCenter;
 
-        Debug.Log("xHigh: " + xHigh);
-        Debug.Log("xLow: " + xLow);
-        Debug.Log("yHigh: " + yHigh);
-        Debug.Log("yLow: " + yLow);
-        //Center of the grid from 4 corners
-        float xCenter = (xHigh + xLow) / 2;
-        float yCenter = (yHigh + yLow) / 2;
+        //Get median of x and y
+        xCenter = (GridData.Instance.xLimitLow + GridData.Instance.xLimitHigh) / 2;
+        yCenter = (GridData.Instance.yLimitLow + GridData.Instance.yLimitHigh) / 2;
 
-        //Set camera to center of the grid
-        maincamera.transform.position = new Vector3(xCenter + xOffSet, yCenter + yOffSet, -10);
+
+        Vector3 center;
+        //find the center of the grid
+        GridData.Instance.gridContainers.ForEach(element =>
+        {
+            if (element.x == xCenter && element.y == yCenter)
+            {
+                center = element.gameObject.transform.position;
+                maincamera.transform.position = new Vector3(center.x + xOffSet, center.y + yOffSet, -10);
+            }
+        });
+        
     }
 
     //Get screen size and set camera size
@@ -48,32 +69,25 @@ public class CameraAdjust : MonoBehaviour
 
     void SetCameraSize()
     {
-        int width = Screen.width;
-        int height = Screen.height;
-        //Adjust camera offset base on screen size
-        if (width > 1600)
+     
+        int widhtLength =  Math.Abs(GridData.Instance.xLimitLow - GridData.Instance.xLimitHigh);
+        
+        if (widhtLength <= 4)
         {
-            cameraSizeOffset = -4.5f;
+            cameraSizeOffset = 2f;
         }
-        if (width > 1000)
+        if (widhtLength >= 5)
         {
-            cameraSizeOffset = -4.00f;
+            cameraSizeOffset = 4f;
         }
-        else if (width > 800)
-        {
-            cameraSizeOffset = 0.3f;
-        }
-        else if (width > 600)
-        {
-            cameraSizeOffset = 0.5f;
-        }
-        else
-        {
-            cameraSizeOffset = 0f;
-        }
-        float cameraSize = (height / 2) / 100f;
-        cameraSize += cameraSizeOffset;
-        maincamera.orthographicSize = cameraSize;
+        
+        Debug.Log("Width Length: " + widhtLength);
+        
+        float cameraSize = maincamera.orthographicSize;
+        
+        maincamera.orthographicSize = cameraSize += cameraSizeOffset;
+
+        Debug.Log("Camera Size: " + cameraSize);
 
     }
 }

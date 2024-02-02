@@ -24,7 +24,10 @@ public class Box : ObstacleItems
     // Update is called once per frame
     void Update()
     {
-        
+        if (CheckBelow())
+        {
+            MoveDown();
+        }
     }
 
     void SetBackgroundColor()

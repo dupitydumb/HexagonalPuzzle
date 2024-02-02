@@ -11,12 +11,17 @@ public class DiscoItems : BoosterItems
     // Start is called before the first frame update
     void Start()
     {
+        grid = GameObject.FindWithTag("Grid").GetComponent<Grid>();
         GridGenerator.Instance.isItemsActive = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (CheckBelow())
+        {
+            MoveDown();
+        }
         
     }
 

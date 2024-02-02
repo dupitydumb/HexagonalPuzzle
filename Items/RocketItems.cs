@@ -17,7 +17,7 @@ public class RocketItems : BoosterItems
     {
         GridGenerator.Instance.isItemsActive = true;
         base.GetLimits();
-        
+        grid = GameObject.FindWithTag("Grid").GetComponent<Grid>();
         
         anim = GetComponent<Animator>();
        
@@ -26,7 +26,10 @@ public class RocketItems : BoosterItems
     // Update is called once per frame
     void Update()
     {
-        
+        if (CheckBelow())
+        {
+            MoveDown();
+        }
     }
 
     void OnMouseOver()
